@@ -10,6 +10,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class Dictionary {
+    private static HashMap<String, String> dict = new HashMap<String, String>();
     private static Logger logger;
     private final static Scanner scan = new Scanner(System.in);
 
@@ -21,6 +22,10 @@ public class Dictionary {
 
     }
 
+    public static HashMap<String, String> getDict() {
+        return dict;
+    }
+
     /**
      * This method insert the word with their meaning in dictionary
      *
@@ -28,8 +33,23 @@ public class Dictionary {
      * @param word        takes input from user
      * @param description takes input from description
      */
-    public static void insert(HashMap<String, String> dict, String word, String description) {
-        dict.put(word, description);
+    public static void insert(String word, String description) {
+        boolean flag=true;
+        for(int i=0;i<word.length();i++)
+        {
+            char ch=word.charAt(i);
+            if(Character.isDigit(ch))
+            {
+                flag=false;
+                break;
+            }
+        }
+        if(flag) {
+            if (word != null) {
+                dict.put(word, description);
+            }
+        }
+
 
     }
 
@@ -39,14 +59,16 @@ public class Dictionary {
      * @param dict takes dictionary hashmap from user
      * @param word takes word from user
      */
-    public static void search(HashMap<String, String> dict, String word) {
+    public static String search(String word) {
+        String meaning = "Not present in dictionary";
         if (dict.containsKey(word)) {
-            String meaning = dict.get(word);
-            logger.info("Meaning of searched word " + word + " " + "is" + " " + meaning + "\n.....");
-        } else {
-            logger.info("Word is not present in dictionary\n......");
+            meaning = dict.get(word);
+            return meaning;
         }
+        return meaning;
+
     }
+
 
     /**
      * This method returns the min length between two words given by user
@@ -55,12 +77,12 @@ public class Dictionary {
      * @param word     is the word for which we are comparing
      * @return minlength
      */
-    public static int minlength(char[] dictword, String word) {
+    public static int minlength(String dictword, String word) {
         int minlen = 0;
-        if (dictword.length > word.length()) {
+        if (dictword.length() > word.length()) {
             minlen = word.length();
         } else {
-            minlen = dictword.length;
+            minlen = dictword.length();
         }
         return minlen;
     }
@@ -73,7 +95,7 @@ public class Dictionary {
      * @param incompleteWord takes incomplete word from user
      * @return array lsit of all matching words
      */
-    public static ArrayList<String> autocomplete(HashMap<String, String> dict, String incompleteWord) {
+    public static ArrayList<String> autocomplete(String incompleteWord) {
         String completeWord = "No word is found in dictionary to be autocompleted";
         ArrayList<String> listOfCorrectWords = new ArrayList<>();
         boolean flag = false;
@@ -81,9 +103,9 @@ public class Dictionary {
 
             int length = 0;
             char[] wordArray = word.toCharArray();
-            length = minlength(wordArray, incompleteWord);
+            length = minlength(word, incompleteWord);
             for (int i = 0; i < length; i++) {
-                if (wordArray[i] != incompleteWord.charAt(i)) {
+                if (word.charAt(i) != incompleteWord.charAt(i)) {
                     if (flag) {
                         break;
                     }
@@ -107,22 +129,22 @@ public class Dictionary {
      * @param incorrectWord takes input from user
      * @return the correct word
      */
-    public static String autocorrect(HashMap<String, String> dict, String incorrectWord) {
+    public static String autocorrect(String incorrectWord) {
         int diff = Integer.MAX_VALUE;
         String correct = "Not a single word matches with given words";
         for (String word : dict.keySet()) {
 
             int length = 0;
-            char[] wordArray = word.toCharArray();
-            length = minlength(wordArray, incorrectWord);
+
+            length = minlength(word, incorrectWord);
 
             for (int i = 0; i < length; i++) {
 
-                if (wordArray[i] != incorrectWord.charAt(i)) {
+                if (word.charAt(i) != incorrectWord.charAt(i)) {
                     if (i > 0) {
-                        if (Math.abs(incorrectWord.length() - wordArray.length) < diff) {
+                        if (Math.abs(incorrectWord.length() - word.length()) < diff) {
                             correct = word;
-                            diff = Math.abs(incorrectWord.length() - wordArray.length);
+                            diff = Math.abs(incorrectWord.length() - word.length());
                             break;
                         }
                     }
@@ -138,7 +160,6 @@ public class Dictionary {
 
     public static void main(String args[]) {
 
-        HashMap<String, String> dict = new HashMap<>();
 
         Scanner sc = new Scanner(System.in);
 
@@ -158,19 +179,20 @@ public class Dictionary {
                     sc.nextLine();
                     System.out.println("Enter the meaning of word");
                     String meaning = sc.nextLine();
-                    insert(dict, word, meaning);
+                    insert(word, meaning);
                     logger.info("Word and meaning is inserted in dictionary\n.......");
                     break;
                 case 2:
                     System.out.println("Enter the word for which we want meaning");
                     String strword = sc.next();
-                    search(dict, strword);
+                    String s = search(strword);
+                    System.out.println("Meaning of given word is " + s);
                     break;
                 case 3:
                     System.out.println("Enter the word to be auto completed");
                     String incompleteWord = sc.next();
                     logger.info("Complete words " +
-                            "  " + autocomplete(dict, incompleteWord));
+                            "  " + autocomplete(incompleteWord));
                     System.out.println("\n");
 
 
@@ -178,7 +200,7 @@ public class Dictionary {
                 case 4:
                     System.out.println("Enter the word to be autocorrected");
                     String incorrectWord = sc.next();
-                    logger.info("Autocorrected word " + autocorrect(dict, incorrectWord));
+                    logger.info("Autocorrected word " + autocorrect(incorrectWord));
 
                     break;
                 case 5:
