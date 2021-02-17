@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.lang.Math;
+import java.util.Set;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -29,22 +30,19 @@ public class Dictionary {
     /**
      * This method insert the word with their meaning in dictionary
      *
-     * @param dict        takes dictionary hashmap from user to insert input
      * @param word        takes input from user
      * @param description takes input from description
      */
     public static void insert(String word, String description) {
-        boolean flag=true;
-        for(int i=0;i<word.length();i++)
-        {
-            char ch=word.charAt(i);
-            if(Character.isDigit(ch))
-            {
-                flag=false;
+        boolean flag = true;
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            if (Character.isDigit(ch)) {
+                flag = false;
                 break;
             }
         }
-        if(flag) {
+        if (flag) {
             if (word != null) {
                 dict.put(word, description);
             }
@@ -56,7 +54,6 @@ public class Dictionary {
     /**
      * This method search the meaning of given word
      *
-     * @param dict takes dictionary hashmap from user
      * @param word takes word from user
      */
     public static String search(String word) {
@@ -91,7 +88,6 @@ public class Dictionary {
      * This method returns all the list of matching complete words
      * from the input of user
      *
-     * @param dict           takes dictionary hashmap from user
      * @param incompleteWord takes incomplete word from user
      * @return array lsit of all matching words
      */
@@ -125,7 +121,6 @@ public class Dictionary {
     /**
      * This  method corrects the word given by user by searching in the dict hashmap
      *
-     * @param dict          takes dictionary hashmap from user
      * @param incorrectWord takes input from user
      * @return the correct word
      */
@@ -159,7 +154,6 @@ public class Dictionary {
     }
 
     public static void main(String args[]) {
-
 
         Scanner sc = new Scanner(System.in);
 
