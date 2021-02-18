@@ -57,10 +57,16 @@ public class Dictionary {
      * @param word takes word from user
      */
     public static String search(String word) {
+        boolean flag=true;
         String meaning = "Not present in dictionary";
         if (dict.containsKey(word)) {
+            flag=false;
             meaning = dict.get(word);
             return meaning;
+        }
+        if(flag)
+        {
+            logger.warning("Not present in dictionary");
         }
         return meaning;
 
@@ -112,8 +118,12 @@ public class Dictionary {
                     listOfCorrectWords.add(word);
                 }
             }
-        }
 
+        }
+        if(flag)
+        {
+            logger.warning("Cant be auto completed");
+        }
         return listOfCorrectWords;
 
     }
