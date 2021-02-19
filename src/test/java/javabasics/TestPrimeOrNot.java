@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class TestPrimeOrNot {
-    IsPrime pr;
+
     @BeforeEach
     public void setup(){
         IsPrime pr = new IsPrime();

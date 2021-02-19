@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestNumberTable {
-    NumberTable tab;
+
     @BeforeEach
     public void setup(){
         NumberTable tab = new NumberTable();

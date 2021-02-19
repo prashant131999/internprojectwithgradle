@@ -3,10 +3,9 @@ package javabasics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class TestFibonacci {
-    Fibonacci fib;
+
     @BeforeEach
     public void setup(){
         Fibonacci fib = new Fibonacci();
