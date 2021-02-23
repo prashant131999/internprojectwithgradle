@@ -1,25 +1,25 @@
 package eccomapp.entity;
 
-public class ProductEntity {
-    private int productId,quantity;
-    private String prodName,prodType,prodDedcription;
-    private float  totalcost;
+import java.util.UUID;
 
-    public ProductEntity(int quantity,float totalcost,String prodName,String prodType,String prodDedcription)
+public class ProductEntity {
+    UUID prodid=UUID.randomUUID();
+    private int quantity;
+    private String prodName,prodType,prodDescription;
+    private float totalCost;
+
+    public ProductEntity()
     {
-        this.quantity=quantity;
-        this.totalcost=totalcost;
-        this.prodName=prodName;
-        this.prodType=prodType;
-        this.prodDedcription=prodDedcription;
+
     }
+
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public void setProdDedcription(String prodDedcription) {
-        this.prodDedcription = prodDedcription;
+    public void setProdDescription(String prodDedcription) {
+        this.prodDescription = prodDescription;
     }
 
     public void setProdName(String prodName) {
@@ -30,15 +30,28 @@ public class ProductEntity {
         this.prodType = prodType;
     }
 
-    public void setTotalcost(float totalcost) {
-        this.totalcost = totalcost;
+    public void setTotalCost(float totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public UUID getProdid()
+    {
+        return prodid;
+    }
+
+    public float getTotalCost() {
+        return totalCost;
+    }
+
+    public String getProdDescription() {
+        return prodDescription;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public float getTotalcost() {
-        return totalcost;
+    public String getProdName() {
+        return prodName;
     }
 }
