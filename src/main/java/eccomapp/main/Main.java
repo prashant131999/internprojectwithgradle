@@ -3,7 +3,6 @@ package eccomapp.main;
 import eccomapp.controller.OrderController;
 import eccomapp.controller.ProductController;
 import eccomapp.controller.UserController;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -33,8 +32,10 @@ public class Main {
                 System.out.println("Connection failed");
             }
 
-        } catch (Exception E) {
+        } catch (SQLException E) {
             System.out.println(E);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
     }
@@ -47,7 +48,7 @@ public class Main {
         while(flag)
     {
         System.out.println("Enter 1 for user");
-        System.out.println("Enter 2 for enter in  cart");
+        System.out.println("Enter 2 for order");
         System.out.println("Enter 3 for products ");
         System.out.println("Enter 4 for exit");
         int choice = sc.nextInt();

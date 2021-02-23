@@ -4,75 +4,122 @@ import eccomapp.cache.Cache;
 import eccomapp.dao.UserDao;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.util.Validator;
 
 import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.Scanner;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 public class UserService {
 
-    private static Logger logger=java.util.logging.Logger.getLogger(UserService.class.getName());
-    public  static boolean  validateNames(String name) throws InvalidInputException
-    {
-        for (int i = 0; i < name.length(); i++) {
-            char ch = name.charAt(i);
-            if (Character.isDigit(ch)) {
-                throw new InvalidInputException(400,"check input");
-            }
-        }
-        return true;
+    private static Logger logger = java.util.logging.Logger.getLogger(UserService.class.getName());
+    Scanner sc = new Scanner(System.in);
+    UserEntity userEntity = new UserEntity();
+    UserDao userDao = new UserDao();
+    Validator validator = new Validator();
+    Cache cache = new Cache(10);
+    private String fname, lname, email, address, dateOfBirth, dateCreated, dateLastUpdated, mobileNumber;
+    private int userid;
 
-    }
-    public static boolean validateMobileNumber(String mobileNumber ) throws InvalidInputException
-    {
-        if(mobileNumber.length()==10)
-        {
-            return true ;
-        }
-        throw new InvalidInputException(400,"invalid mobile number");
-
-    }
-    public static boolean isValidEmail(String email)
-    {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,7}$";
-
-        Pattern pat = Pattern.compile(emailRegex);
-        if (email == null)
-            return false;
-        return pat.matcher(email).matches();
-    }
-    public  void validateEmailAddress(String email) throws InvalidInputException
-    {
-        if(!(isValidEmail(email)))
-        {
-            throw new InvalidInputException(400,"invalid email address");
-        }
-    }
-    public  void validate(String fname, String lname, String email, String mobileNumber, String address,
-                     String dateOfBirth, UserEntity userEntityObj,Connection connection) throws InvalidInputException
-    {
-        UserDao userDao=new UserDao();
-        Cache cache=new Cache(10);
-        if(cache.contains(mobileNumber))
-        {
+    /**
+     * This method create the user in the database by taking input
+     *
+     * @param connection for connecting to database
+     * @param logger     for logging
+     */
+    public void createuser(Connection connection, Logger logger) throws InvalidInputException {
+        System.out.println("Enter the first name");
+        fname = sc.next();
+        userEntity.setFname(fname);
+        validator.validateNames(userEntity.getFname());
+        System.out.println("Enter the last name");
+        lname = sc.next();
+        userEntity.setLname(lname);
+        validator.validateNames(userEntity.getLname());
+        System.out.println("Enter the mobile number");
+        mobileNumber = sc.next();
+        userEntity.setMobileNumber(mobileNumber);
+        validator.validateMobileNumber(userEntity.getMobileNumber());
+        System.out.println("Enter the email");
+        email = sc.next();
+        userEntity.setEmail(email);
+        validator.validateEmailAddress(userEntity.getEmail());
+        System.out.println("Enter the address");
+        address = sc.next();
+        userEntity.setAddress(address);
+        System.out.println("date of birth");
+        dateOfBirth = sc.next();
+        userEntity.setDateOfBirth(dateOfBirth);
+        Cache cache = new Cache(10);
+        if (cache.contains(mobileNumber)) {
             logger.info("User is already created");
-        }
-        else {
-            try {
-                userDao.createNewUser(fname,lname,email,mobileNumber,address,dateOfBirth,userEntityObj, connection);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-            cache.put(mobileNumber, userEntityObj);
+        } else {
+            userDao.createNewUser(userEntity, connection);
+            cache.put(mobileNumber, userEntity);
         }
         logger.info("User created");
 
 
     }
 
+    /**
+     * This method deletes the user from database by taking
+     * email id of user
+     *
+     * @param connection for connecting to database
+     * @param logger     for logging
+     */
+
+    public void deleteuser(Connection connection, Logger logger) throws InvalidInputException {
+        System.out.println("Enter the email id of user to delete");
+        email = sc.next();
+        userEntity.setEmail(email);
+
+        validator.validateEmailAddress(userEntity.getEmail());
+
+
+        Cache cache = new Cache(10);
+        if (cache.contains(email)) {
+            cache.delete(email);
+            userDao.deleteUser(userEntity, connection);
+            logger.info("user deleted");
+        } else {
+            if (userDao.emailPresent(userEntity, connection)) {
+                userDao.deleteUser(userEntity, connection);
+                logger.info("user deleted");
+            } else {
+                logger.warning("You are not registered user");
+            }
+
+        }
+    }
+
+    /**
+     * This method update the address of user by taking mobile number from user
+     *
+     * @param connection for connected to database
+     * @param logger     for logging
+     */
+    public void updateUser(Connection connection, Logger logger) throws InvalidInputException {
+        System.out.println("Enter the mobile number of user whose address you want to update");
+        String mob = sc.next();
+        System.out.println("Enter the new address");
+        address = sc.next();
+        userEntity.setAddress(address);
+        userEntity.setMobileNumber(mob);
+
+        if (cache.contains(mob)) {
+            cache.delete(mob);
+            cache.put(address, userEntity);
+            userDao.updateUser(userEntity, connection);
+            logger.info("user data updated");
+        } else {
+            userDao.updateUser(userEntity, connection);
+            logger.info("user data updated");
+        }
+
+    }
 
 }
+
+
