@@ -3,15 +3,14 @@ package eccomapp.main;
 import eccomapp.controller.OrderController;
 import eccomapp.controller.ProductController;
 import eccomapp.controller.UserController;
-import java.sql.Connection;
-import java.sql.DriverManager;
+import eccomapp.util.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Main {
     private static Logger logger;
-    private static Connection connection;
+    static java.sql.Connection connection;
     static {
         System.setProperty("java.util.logging.config.file",
                 "/home/raramuri/IdeaProjects/testinggradle/src/main/resources/logging.properties");
@@ -19,26 +18,9 @@ public class Main {
     }
     public static void getConnected()
     {
-//        Connection connection = null;
-        try {
-
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection("jdbc:postgresql://0.0.0.0:5432/ecomprashant",
-                    "prashant", "prashants");
-
-            if (connection != null) {
-                System.out.println("Connection established");
-            } else {
-                System.out.println("Connection failed");
-            }
-
-        } catch (SQLException E) {
-            System.out.println(E);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
+     connection=Connection.create();
     }
+
     public static void main(String args[])
         {
      getConnected();

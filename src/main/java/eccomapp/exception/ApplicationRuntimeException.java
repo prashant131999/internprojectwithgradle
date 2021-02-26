@@ -2,13 +2,15 @@ package eccomapp.exception;
 
 import java.util.logging.Logger;
 
-public class InvalidInputException extends Exception {
+public class ApplicationRuntimeException extends RuntimeException {
     int errorCode;
     String errorMessage;
     private static Logger logger;
-    public InvalidInputException(int errorCode, String errorMessage){
-        this.errorCode=errorCode;
-        this.errorMessage=errorMessage;
+
+    public ApplicationRuntimeException(int errorCode, String errorMessage, Throwable cause) {
+        super(cause);
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
     }
 
     public int getErrorCode() {

@@ -1,11 +1,15 @@
 package eccomapp.controller;
 
+import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
 import eccomapp.service.OrderService;
-
 import java.sql.Connection;
 import java.util.Scanner;
 import java.util.logging.Logger;
+
+/**The OrderController presents the order menu.
+ *
+ */
 
 public class OrderController {
     OrderService orderService=new OrderService();
@@ -25,18 +29,21 @@ public class OrderController {
         switch (choice) {
             case 1:
                 try {
-                    orderService.displayOrder(connection, logger);
-                }catch (InvalidInputException e){
-                    e.getError();
+               orderService.displayOrder(connection, logger);
+                }catch (ApplicationRuntimeException e){
+                    e.logError();
                 }
                 break;
             case 2:
-                System.out.println("Enter the mobile number of user");
-                String number=sc.next();
+                System.out.println("Enter the email of user");
+
+                String email=sc.next();
                 try {
-                    orderService.createOrder(connection, logger, number);
-                }catch (InvalidInputException e){
-                    e.getError();
+                    orderService.createOrder(connection, logger, email);
+                }catch (ApplicationRuntimeException e){
+                    e.logError();
+                } catch (InvalidInputException e) {
+                    e.logError();
                 }
                 break;
             case 3:
@@ -44,8 +51,8 @@ public class OrderController {
                 String name=sc.next();
                 try {
                     orderService.deleteOrder(connection, logger, name);
-                }catch (InvalidInputException e){
-                    e.getError();
+                }catch (ApplicationRuntimeException e){
+                    e.logError();
                 }
                 break;
         }

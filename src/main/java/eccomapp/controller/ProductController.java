@@ -1,6 +1,7 @@
 package eccomapp.controller;
 
 import eccomapp.entity.ProductEntity;
+import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
 import eccomapp.service.ProductService;
 
@@ -8,8 +9,12 @@ import java.sql.Connection;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+/**The ProductController menu presents the product menu.
+ *
+ */
 public class ProductController {
     ProductService productService=new ProductService();
+    ProductEntity productEntity=new ProductEntity();
     /**This method presents the menu to choose the operation to perform
      *
      * @param connection for connecting to database
@@ -26,23 +31,23 @@ public class ProductController {
             case 1:
                 try {
                     productService.addproduct(connection,logger);
-                } catch (InvalidInputException e){
-                    e.getError();
+                } catch (ApplicationRuntimeException e){
+                    e.logError();
+                } catch (InvalidInputException e) {
+                    e.logError();
                 }
                 break;
             case 2:
-                ProductEntity prodEntity=new ProductEntity();
+                //ProductEntity prodEntity=new ProductEntity();
                 System.out.println("Enter the name of product to delete");
                 String namep=sc.next();
                 try {
-                    productService.deleteProduct(prodEntity, connection, namep, logger);
-                }catch (InvalidInputException e){
-                    e.getError();
+                    productService.deleteProduct( connection, namep, logger);
+                }catch (ApplicationRuntimeException e){
+                    e.logError();
                 }
                 break;
             case 3:
-                //System.out.println("enter the quantity to update");
-                //int updatedQuantity=sc.nextInt();
                 System.out.println("Enter 1 to update product name");
                 System.out.println("Enter 2 to update product quantity");
                 int option=sc.nextInt();
@@ -53,11 +58,10 @@ public class ProductController {
                         String oldName = sc.next();
                         System.out.println("Enter the new name of product");
                         String newName=sc.next();
-                        ProductEntity productEntity=new ProductEntity();
                         try {
-                            productService.updateProductName(productEntity, connection, newName, oldName, logger);
-                        }catch (InvalidInputException e){
-                            e.getError();
+                            productService.updateProductName( connection, newName, oldName, logger);
+                        }catch (ApplicationRuntimeException e){
+                            e.logError();
                         }
 
                         break;
@@ -71,8 +75,10 @@ public class ProductController {
                         int quant=sc.nextInt();
                         try {
                             productService.updateProductQuantity(connection, names, quant, logger);
-                        }catch (InvalidInputException e){
-                            e.getError();
+                        }catch (ApplicationRuntimeException e){
+                            e.logError();
+                        } catch (InvalidInputException e) {
+                            e.logError();
                         }
                         break;
                     default:

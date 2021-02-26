@@ -1,8 +1,7 @@
 package eccomapp.dao;
 
 import eccomapp.entity.UserEntity;
-import eccomapp.exception.InvalidInputException;
-
+import eccomapp.exception.ApplicationRuntimeException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,26 +24,33 @@ public class UserDao {
             statement.setString(6, userEntity.getEmail());
             statement.setString(7, userEntity.getDateOfBirth());
             statement.executeUpdate();
-        }
-        catch (SQLException e) {
-            throw new InvalidInputException(400, "Wrong Input");
+        } catch (SQLException e) {
+            throw new ApplicationRuntimeException(500, "Server error", e.getCause());
         }
 
     }
 
-    public UUID getID(Connection connection, String number) throws SQLException {
-        String sql = "SELECT customer_id FROM customer WHERE mobile_number=?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, number);
-        ResultSet rs = statement.executeQuery();
-        while (rs.next()) {
-            UUID id = (UUID) rs.getObject(1);
-            return id;
+    public UUID getID(Connection connection, String email) throws ApplicationRuntimeException {
+        UserEntity userEntity=new UserEntity();
+        userEntity.setEmail(email);
+        try {
+                String sql = "SELECT customer_id FROM customer WHERE email=?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, email);
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    UUID id = (UUID) rs.getObject(1);
+                    return id;
+                }
+            }
+        catch (SQLException e) {
+            throw new ApplicationRuntimeException(400, "wrong mail", e.getCause());
+
         }
         return null;
     }
 
-    public void updateUser(UserEntity userEntity, Connection connection) throws InvalidInputException {
+    public void updateUser(UserEntity userEntity, Connection connection) throws ApplicationRuntimeException {
         try {
             String sql = "UPDATE customer SET address=? WHERE mobile_number=?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -52,11 +58,11 @@ public class UserDao {
             statement.setString(2, userEntity.getMobileNumber());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new InvalidInputException(400, "Wrong Input");
+            throw new ApplicationRuntimeException(400, "wrong mail", e.getCause());
         }
     }
 
-    public boolean emailPresent(UserEntity userEntity, Connection connection) throws InvalidInputException {
+    public boolean emailPresent(UserEntity userEntity, Connection connection) throws ApplicationRuntimeException {
         try {
             String sql = "SELECT * FROM customer";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -67,26 +73,20 @@ public class UserDao {
                     return true;
                 }
             }
-        }catch (SQLException e)
-        {
-            throw new InvalidInputException(400,"wrong mail");
+        } catch (SQLException e) {
+            throw new ApplicationRuntimeException(400, "wrong mail", e.getCause());
         }
-
-return false;
+        return false;
     }
-
-    public void deleteUser(UserEntity userEntity, Connection connection)throws InvalidInputException {
+    public void deleteUser(UserEntity userEntity, Connection connection) throws ApplicationRuntimeException {
         try {
             String sql = "DELETE FROM customer WHERE email=?";
             PreparedStatement statement = null;
             statement = connection.prepareStatement(sql);
             statement.setString(1, userEntity.getEmail());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new ApplicationRuntimeException(400, "wrong mail entered", e.getCause());
         }
-        catch (SQLException e)
-        {
-            throw new InvalidInputException(400,"wrong mail entered");
-        }
-
     }
 }

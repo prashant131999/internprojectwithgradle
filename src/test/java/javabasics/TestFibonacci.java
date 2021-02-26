@@ -4,8 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
-public class TestFibonacci {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+public class TestFibonacci {
+   Fibonacci fib;
     @BeforeEach
     public void setup(){
         Fibonacci fib = new Fibonacci();

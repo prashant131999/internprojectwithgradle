@@ -1,23 +1,14 @@
 package eccomapp.entity;
 
+import eccomapp.annotation.NotNullAnnotation;
+
 import java.util.UUID;
 
 public class UserEntity {
-    private String fname,lname,email,address,dateOfBirth,dateCreated,dateLastUpdated,mobileNumber;
-    UUID userid=UUID.randomUUID();
+    @NotNullAnnotation
+    private String fname, lname, email, address, dateOfBirth, dateCreated, dateLastUpdated, mobileNumber;
 
-
-//    public UserEntity() {
-//        this.fname=fname;
-//        this.lname=lname;
-//        this.email=email;
-//        this.address=address;
-//        this.dateOfBirth=dateOfBirth;
-//        this.dateCreated=dateCreated;
-//        this.dateLastUpdated=dateLastUpdated;
-//        this.mobileNumber=mobileNumber;
-//    }
-
+    UUID userid = UUID.randomUUID();
 
     public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
@@ -25,10 +16,6 @@ public class UserEntity {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public void setDateLastUpdated(String dateLastUpdated) {
-        this.dateLastUpdated = dateLastUpdated;
     }
 
     public void setDateOfBirth(String dateOfBirth) {

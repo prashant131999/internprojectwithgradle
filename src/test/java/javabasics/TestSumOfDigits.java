@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestSumOfDigits {
-
+SumOfDigits sumobj;
     @BeforeEach
     public void setup(){
         SumOfDigits sumobj = new SumOfDigits();

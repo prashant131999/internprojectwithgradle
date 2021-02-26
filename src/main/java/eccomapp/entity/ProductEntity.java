@@ -3,16 +3,13 @@ package eccomapp.entity;
 import java.util.UUID;
 
 public class ProductEntity {
-    UUID prodid=UUID.randomUUID();
+    UUID prodid = UUID.randomUUID();
     private int quantity;
-    private String prodName,prodType,prodDescription;
+    private String prodName, prodType, prodDescription;
     private float totalCost;
-
-    public ProductEntity()
-    {
-
-    }
-
+    public ProductEntity ()
+     {
+     }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
@@ -34,8 +31,7 @@ public class ProductEntity {
         this.totalCost = totalCost;
     }
 
-    public UUID getProdid()
-    {
+    public UUID getProdid() {
         return prodid;
     }
 

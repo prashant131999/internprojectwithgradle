@@ -1,34 +1,71 @@
 package eccomapp.service;
 
 import eccomapp.dao.OrderDao;
+import eccomapp.dao.ProductDao;
+import eccomapp.dao.UserDao;
 import eccomapp.entity.OrderEntity;
+import eccomapp.entity.UserEntity;
+import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.util.Validator;
 import java.sql.Connection;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+/**The OrderService class sends the create ,display,and delete order
+ * to database
+ */
 public class OrderService {
-    Scanner sc = new Scanner(System.in);
-    OrderDao orderDao = new OrderDao();
-    OrderEntity orderEntityObj = new OrderEntity();
+    Scanner sc ;
+    OrderDao orderDao;
+    ProductDao productDao;
+    OrderEntity orderEntity;
+    Validator validator ;
+    UserDao userDao ;
+    UserEntity userEntity;
     private String listOfProduct, dateCreated, dateDelivered, quantitylist;
     private int totalCost, orderid;
 
+   public OrderService(Scanner sc,OrderDao orderDao,ProductDao productDao,OrderEntity orderEntity,Validator validator
+   ,UserDao userDao,UserEntity userEntity)
+   {
+       this.sc=sc;
+       this.orderDao=orderDao;
+       this.productDao=productDao;
+       this.orderEntity=orderEntity;
+       this.validator=validator;
+       this.userDao=userDao;
+       this.userEntity=userEntity;
+   }
+    public OrderService()
+    {
+        sc=new Scanner(System.in);
+        orderDao=new OrderDao();
+        productDao=new ProductDao();
+        orderEntity=new OrderEntity();
+        validator=new Validator();
+        userDao=new UserDao();
+        userEntity=new UserEntity();
+    }
     /**
-     * This method place the order by taking product name and mobile number from user
+     * This method place the order by taking product name and email from user
      *
      * @param connection for connecting
      * @param logger     for logging
-     * @param number     for mobile number
+     * @param email for email of user
      */
-    public void createOrder(Connection connection, Logger logger, String number) throws InvalidInputException {
-
-        System.out.println("Enter the  product name");
+    public void createOrder(Connection connection, Logger logger, String email) throws ApplicationRuntimeException, InvalidInputException {
+        validator.validateEmailAddress(email);
+        logger.info("Enter the  product name");
         listOfProduct = sc.next();
-        orderEntityObj.setListOfProduct(listOfProduct);
-        OrderDao orderDao = new OrderDao();
-        orderDao.addOrder(connection, listOfProduct, number);
-        logger.info("Order placed");
+        userEntity.setEmail(email);
+        if (userDao.emailPresent(userEntity, connection)) {
+            orderEntity.setListOfProduct(listOfProduct);
+            orderDao.addOrder(connection, listOfProduct, email);
+            logger.info("Order placed");
+        } else {
+            logger.warning("You are not registered customer");
+        }
 
     }
 
@@ -38,9 +75,8 @@ public class OrderService {
      * @param connection for connecting to database
      * @param logger     for logging
      */
-    public void displayOrder(Connection connection, Logger logger) throws InvalidInputException {
-        OrderDao orderDao = new OrderDao();
-        orderDao.display(connection, logger);
+    public void displayOrder(Connection connection, Logger logger) throws ApplicationRuntimeException {
+        productDao.display(connection, logger);
 
     }
 
@@ -51,7 +87,7 @@ public class OrderService {
      * @param logger     for logging
      * @param name       for name of product
      */
-    public void deleteOrder(Connection connection, Logger logger, String name) throws InvalidInputException{
+    public void deleteOrder(Connection connection, Logger logger, String name) throws ApplicationRuntimeException {
         orderDao.deleteOrder(connection, logger, name);
 
     }
