@@ -21,6 +21,6 @@ public class InvalidInputException extends Exception {
 
 
     public void logError() {
-        logger.warning(errorCode+" "+errorMessage);
+        System.out.println(errorCode+" "+errorMessage);
     }
 }

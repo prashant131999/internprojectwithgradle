@@ -8,8 +8,8 @@ public class NotNullValidator implements
     @Override
     public void initialize(NotNullAnnotation constraintAnnotation) {}
     @Override
-    public boolean isValid(String contactField,
-                           ConstraintValidatorContext cxt) {
-        return contactField != null  && (contactField.length() > 8) && (contactField.length() < 14);
+    public boolean isValid(String name, ConstraintValidatorContext cxt) {
+
+        return name != null && name.matches("^[a-zA-Z]*$");
     }
 }

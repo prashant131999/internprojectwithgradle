@@ -3,6 +3,8 @@ package eccomapp.controller;
 import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
 import eccomapp.service.UserService;
+
+
 import java.sql.Connection;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -13,6 +15,7 @@ import java.util.logging.Logger;
 public class UserController {
     Scanner sc = new Scanner(System.in);
     UserService userService=new UserService();
+
 
     /**This method presents menu for taking input according to which it does the operation
      *

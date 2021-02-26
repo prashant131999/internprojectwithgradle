@@ -7,11 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target( { ElementType.METHOD, ElementType.FIELD })
+@Target( {  ElementType.FIELD })
 @Constraint(validatedBy = NotNullValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotNullAnnotation {
-      String message() default "This field cant be null\"{message}\"";
+      String message() default "This field should be contain any letter";
       Class<?>[] groups() default {};
       Class<? extends Payload>[] payload() default {};
 }

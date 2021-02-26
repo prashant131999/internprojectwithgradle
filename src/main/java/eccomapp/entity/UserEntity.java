@@ -6,7 +6,9 @@ import java.util.UUID;
 
 public class UserEntity {
     @NotNullAnnotation
-    private String fname, lname, email, address, dateOfBirth, dateCreated, dateLastUpdated, mobileNumber;
+    private String  lname;
+
+    private String dateOfBirth, email, address,fname, dateCreated, dateLastUpdated, mobileNumber;
 
     UUID userid = UUID.randomUUID();
 

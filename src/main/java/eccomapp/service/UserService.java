@@ -6,8 +6,13 @@ import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
 import eccomapp.util.Validator;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 import java.sql.Connection;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.logging.Logger;
 /**
  * The User service class sends the data to User Dao class to manipulate the database
@@ -23,6 +28,8 @@ public class UserService {
     Cache cache = new Cache(10);
     private String fname, lname, email, address, dateOfBirth, dateCreated, dateLastUpdated, mobileNumber;
     private int userid;
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    javax.validation.Validator validators = factory.getValidator();
     /**
      * This method create the user in the database by taking input
      *
@@ -52,6 +59,11 @@ public class UserService {
         logger.info("date of birth in format dd-mm-yyyy");
         dateOfBirth = sc.next();
         userEntity.setDateOfBirth(dateOfBirth);
+        Set<ConstraintViolation<UserEntity>> constraintViolations=validators.validate(userEntity);
+        if(constraintViolations.size()>0)
+        {
+            throw new InvalidInputException(400,constraintViolations.iterator().next().getMessage());
+        }
         Cache cache = new Cache(10);
         if (cache.contains(mobileNumber)) {
             logger.info("User is already created");
