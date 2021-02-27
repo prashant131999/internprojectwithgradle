@@ -15,20 +15,15 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class TestProductDao {
-    static Connection connection;
-    static PreparedStatement preparedStatement;
-    static ResultSet resultSet;
-    static ProductDao productDao;
-    static ProductEntity productEntity;
-    static Logger logger;
+    private static Connection connection= Mockito.mock(Connection.class);
+    private static PreparedStatement preparedStatement=Mockito.mock(PreparedStatement.class);
+    private static ResultSet resultSet=Mockito.mock(ResultSet.class);
+    private static ProductEntity productEntity=Mockito.mock(ProductEntity.class);
+    private static Logger logger=Mockito.mock(Logger.class);
+    private static ProductDao productDao;
     @BeforeAll
     public static void setup()
     {
-        connection= Mockito.mock(Connection.class);
-        resultSet=Mockito.mock(ResultSet.class);
-        preparedStatement=Mockito.mock(PreparedStatement.class);
-        productEntity=Mockito.mock(ProductEntity.class);
-        logger=Mockito.mock(Logger.class);
         productDao=new ProductDao();
     }
     @Test

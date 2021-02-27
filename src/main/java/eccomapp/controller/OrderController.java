@@ -12,8 +12,8 @@ import java.util.logging.Logger;
  */
 
 public class OrderController {
-    OrderService orderService=new OrderService();
-    Scanner sc=new Scanner(System.in);
+    private OrderService orderService=new OrderService();
+    private Scanner sc=new Scanner(System.in);
     /**This method presents the order menu
      *
      * @param connection for connecting to database
@@ -54,6 +54,8 @@ public class OrderController {
                 }catch (ApplicationRuntimeException e){
                     e.logError();
                 }
+                break;
+            default:
                 break;
         }
     }

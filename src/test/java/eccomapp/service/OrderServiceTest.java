@@ -11,41 +11,32 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.sql.Connection;
-import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class OrderServiceTest {
-    static UserDao userDao;
-    static OrderService orderService;
-    static Connection connection;
-    static Logger logger;
-    static OrderDao orderDao;
-    static ProductDao productDao;
-    static OrderEntity orderEntity;
-    static Validator validator;
-    static UserEntity userEntity;
+    private static UserDao userDao = Mockito.mock(UserDao.class);
+    private static Connection connection = Mockito.mock(Connection.class);
+    private static Logger logger = Mockito.mock(Logger.class);
+    private static OrderDao orderDao = Mockito.mock(OrderDao.class);
+    private static ProductDao productDao = Mockito.mock(ProductDao.class);
+    private static OrderEntity orderEntity = Mockito.mock(OrderEntity.class);
+    private static Validator validator = Mockito.mock(Validator.class);
+    private static UserEntity userEntity = Mockito.mock(UserEntity.class);
+    private static OrderService orderService;
+
     @BeforeAll
     public static void setup() {
-        Scanner sc =new Scanner(System.in);
-        connection = Mockito.mock(Connection.class);
-        logger = Mockito.mock(Logger.class);
-        orderDao = Mockito.mock(OrderDao.class);
-        productDao = Mockito.mock(ProductDao.class);
-        orderEntity = Mockito.mock(OrderEntity.class);
-        validator = Mockito.mock(Validator.class);
-         userEntity = Mockito.mock(UserEntity.class);
-         userDao = Mockito.mock(UserDao.class);
-        orderService = new OrderService(sc,orderDao, productDao, orderEntity, validator, userDao, userEntity);
+        orderService = new OrderService(orderDao, productDao, orderEntity, validator, userDao, userEntity);
     }
 
     @Test
     public void testdelete() {
         orderService.deleteOrder(connection, logger, "Prashant");
     }
+
     @Test
-    public void testDisplay()
-    {
-        orderService.displayOrder(connection,logger);
+    public void testDisplay() {
+        orderService.displayOrder(connection, logger);
     }
 
 }

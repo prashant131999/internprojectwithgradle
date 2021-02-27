@@ -9,27 +9,19 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.sql.Connection;
-import java.util.Scanner;
 import java.util.logging.Logger;
 
 import static org.mockito.Mockito.when;
 
 public class ProductServiceTest {
-    static ProductService productService;
-    static Connection connection;
-    static Logger logger;
-    static Validator validator ;
-    static ProductEntity productEntity ;
-    static ProductDao productDao ;
-    static Scanner sc ;
+    private static ProductService productService;
+    private static Connection  connection = Mockito.mock(Connection.class);
+    private static Logger logger = Mockito.mock(Logger.class);
+    private static Validator validator = Mockito.mock(Validator.class);
+    private static ProductEntity productEntity=Mockito.mock(ProductEntity.class) ;
+    private static ProductDao productDao = Mockito.mock(ProductDao.class);
     @BeforeAll
     public static void setup() {
-        //Scanner sc=new Scanner(System.in);
-        connection = Mockito.mock(Connection.class);
-        logger = Mockito.mock(Logger.class);
-        productDao = Mockito.mock(ProductDao.class);
-        validator = Mockito.mock(Validator.class);
-        productEntity=Mockito.mock(ProductEntity.class);
         productService = new ProductService(productDao,validator,productEntity);
     }
     @Test

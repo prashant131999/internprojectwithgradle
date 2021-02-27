@@ -4,7 +4,6 @@ import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
 import eccomapp.service.UserService;
 
-
 import java.sql.Connection;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -13,8 +12,8 @@ import java.util.logging.Logger;
  *
  */
 public class UserController {
-    Scanner sc = new Scanner(System.in);
-    UserService userService=new UserService();
+   private  Scanner sc = new Scanner(System.in);
+   private UserService userService=new UserService();
 
 
     /**This method presents menu for taking input according to which it does the operation
@@ -54,6 +53,8 @@ public class UserController {
                 }catch (ApplicationRuntimeException e){
                     e.logError();
                 }
+                break;
+            default:
                 break;
         }
     }

@@ -5,13 +5,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TestCache {
-    static Cache cache;
-    static UserEntity userEntity;
+    private static Cache cache;
+    private static UserEntity userEntity;
+
     @BeforeAll
-    public static void setup()
-    {
-        cache=new Cache(10);
-        UserEntity userEntity=new UserEntity();
+    public static void setup() {
+        cache = new Cache(10);
+        UserEntity userEntity = new UserEntity();
         userEntity.setEmail("prashant@gmail.com");
         userEntity.setMobileNumber("9639402926");
         userEntity.setAddress("bangalore");
@@ -19,10 +19,10 @@ public class TestCache {
         userEntity.setFname("prashant");
         userEntity.setLname("sahrawat");
     }
+
     @Test
-    public void testCache()
-    {
-        cache.put("prashant",userEntity);
+    public void testCache() {
+        cache.put("prashant", userEntity);
         cache.contains("prashant");
         cache.get("prashant");
         cache.delete("prashant");

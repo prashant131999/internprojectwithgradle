@@ -8,13 +8,13 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-public class Main {
+public class Ecommerce {
     private static Logger logger;
     static java.sql.Connection connection;
     static {
         System.setProperty("java.util.logging.config.file",
                 "/home/raramuri/IdeaProjects/testinggradle/src/main/resources/logging.properties");
-        logger= java.util.logging.Logger.getLogger(Main.class.getName());
+        logger= java.util.logging.Logger.getLogger(Ecommerce.class.getName());
     }
     public static void getConnected()
     {

@@ -15,38 +15,39 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class TestUserDao {
-    static UserDao userDao;
-    static Connection connection;
-    static UserEntity userEntity;
-    static PreparedStatement preparedStatement;
-    static ResultSet resultSet;
+    private static UserDao userDao;
+    private static Connection connection = Mockito.mock(Connection.class);
+    private static UserEntity userEntity = Mockito.mock(UserEntity.class);
+    private static PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
+    private static ResultSet resultSet = Mockito.mock(ResultSet.class);
+
     @BeforeAll
     public static void setup() {
-        connection= Mockito.mock(Connection.class);
-        userEntity=Mockito.mock(UserEntity.class);
-        preparedStatement=Mockito.mock(PreparedStatement.class);
-        resultSet=Mockito.mock(ResultSet.class);
-        userDao=new UserDao();
+        userDao = new UserDao();
     }
+
     @Test
     public void testCreateUser() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        userDao.createNewUser(userEntity,connection);
+        userDao.createNewUser(userEntity, connection);
     }
+
     @Test
     public void testGetId() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
-        when(userDao.getID(connection,"prashant@gmail.com")).thenReturn(UUID.randomUUID());
+        when(userDao.getID(connection, "prashant@gmail.com")).thenReturn(UUID.randomUUID());
     }
+
     @Test
     public void testUpdate() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        userDao.updateUser(userEntity,connection);
+        userDao.updateUser(userEntity, connection);
     }
+
     @Test
     public void testEmailPresent() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
@@ -55,10 +56,11 @@ public class TestUserDao {
         when(connection.prepareStatement("")).thenReturn(preparedStatement);
         userDao.emailPresent(userEntity, connection);
     }
+
     @Test
     public void testDeleteUser() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        userDao.deleteUser(userEntity,connection);
+        userDao.deleteUser(userEntity, connection);
     }
 }

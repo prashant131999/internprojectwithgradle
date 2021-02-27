@@ -21,11 +21,11 @@ import java.util.logging.Logger;
 
 public class UserService {
 
-    Scanner sc = new Scanner(System.in);
-    UserEntity userEntity = new UserEntity();
-    UserDao userDao = new UserDao();
-    Validator validator = new Validator();
-    Cache cache = new Cache(10);
+    private Scanner sc = new Scanner(System.in);
+    private UserEntity userEntity = new UserEntity();
+    private UserDao userDao = new UserDao();
+    private Validator validator = new Validator();
+    private Cache cache = new Cache(10);
     private String fname, lname, email, address, dateOfBirth, dateCreated, dateLastUpdated, mobileNumber;
     private int userid;
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();

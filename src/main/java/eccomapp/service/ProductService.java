@@ -18,10 +18,10 @@ public class ProductService {
     private int quantity;
     private String prodName, prodType, prodDescription;
     private float cost, totalCost;
-    Validator validator ;
-    ProductEntity productEntity ;
-    ProductDao productDao ;
-    Scanner sc ;
+    private Validator validator ;
+    private ProductEntity productEntity ;
+    private ProductDao productDao ;
+    private Scanner sc ;
     public ProductService()
     {
         sc=new Scanner(System.in);

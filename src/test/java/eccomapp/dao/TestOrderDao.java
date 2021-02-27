@@ -1,6 +1,5 @@
 package eccomapp.dao;
 
-import eccomapp.entity.OrderEntity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,19 +14,14 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class TestOrderDao {
-    static Connection connection;
-    static PreparedStatement preparedStatement;
-    static ResultSet resultSet;
-    static OrderDao orderDao;
-    static OrderEntity orderEntity;
-    static Logger logger;
+    private static Connection  connection= Mockito.mock(Connection.class);
+    private static PreparedStatement preparedStatement=Mockito.mock(PreparedStatement.class);
+    private static ResultSet resultSet=Mockito.mock(ResultSet.class);
+    private static Logger logger=Mockito.mock(Logger.class);
+    private static OrderDao orderDao;
     @BeforeAll
     public static void setup()
     {
-        connection= Mockito.mock(Connection.class);
-        resultSet=Mockito.mock(ResultSet.class);
-        preparedStatement=Mockito.mock(PreparedStatement.class);
-        logger=Mockito.mock(Logger.class);
         orderDao=new OrderDao();
     }
     @Test
