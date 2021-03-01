@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestMatrixAddAndSub {
-
+Matrixaddandsub mat;
     @BeforeEach
     public void setup(){
         Matrixaddandsub mat = new Matrixaddandsub();
