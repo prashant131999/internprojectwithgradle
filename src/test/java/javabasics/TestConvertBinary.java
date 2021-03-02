@@ -25,10 +25,10 @@ public class TestConvertBinary {
     public void testConvertBinary2()
     {
         ArrayList<Integer>actual=new ArrayList<Integer>();
-        actual.add(1);
-        actual.add(1);
         actual.add(0);
-        assertEquals(actual,3);
+        actual.add(0);
+        actual.add(1);
+        assertEquals(actual,conv.convertdectobin(4));
 
     }
 

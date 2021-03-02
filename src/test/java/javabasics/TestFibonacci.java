@@ -26,7 +26,7 @@ public class TestFibonacci {
         ArrayList<Integer>actual=new ArrayList<Integer>();
         actual.add(1);
         actual.add(1);
-        actual.add(3);
+        actual.add(2);
         assertEquals(actual,fib.fibonacci(3));
     }
 }

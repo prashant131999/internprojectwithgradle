@@ -24,9 +24,8 @@ public class TestExtractWords {
     {
         ArrayList<String>actual=new ArrayList<>();
         actual.add("prashant");
-        actual.add("sahrawat");
         actual.add("kumar");
-        assertEquals(actual,ext.extractWords("prashant sahrawat"));
+        assertEquals(actual,ext.extractWords("prashant kumar"));
     }
 
 
