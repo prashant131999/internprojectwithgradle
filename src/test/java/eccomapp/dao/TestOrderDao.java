@@ -34,6 +34,6 @@ public class TestOrderDao {
     public  void testDeleteOrder() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        orderDao.deleteOrder(connection,logger,"prashant");
+        orderDao.deleteOrder(connection,"prashant");
     }
 }

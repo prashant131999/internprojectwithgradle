@@ -11,6 +11,20 @@ public class UserEntity {
     private String dateOfBirth, email, address,fname, dateCreated, dateLastUpdated, mobileNumber;
 
     UUID userid = UUID.randomUUID();
+    public UserEntity(String fname,String lname,String email,String dateOfBirth,String address
+    ,String mobileNumber)
+    {
+        this.fname=fname;
+        this.lname=lname;
+        this.email=email;
+        this.dateOfBirth=dateOfBirth;
+        this.address=address;
+        this.mobileNumber=mobileNumber;
+    }
+    public UserEntity()
+    {
+
+    }
 
     public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
@@ -74,5 +88,9 @@ public class UserEntity {
 
     public UUID getUserid() {
         return userid;
+    }
+    public void setUserid(UUID userid)
+    {
+        this.userid=userid;
     }
 }

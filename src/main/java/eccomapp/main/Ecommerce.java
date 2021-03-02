@@ -4,6 +4,7 @@ import eccomapp.controller.OrderController;
 import eccomapp.controller.ProductController;
 import eccomapp.controller.UserController;
 import eccomapp.util.Connection;
+
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -39,7 +40,7 @@ public class Ecommerce {
             case 1:
                 System.out.println("You are inside the user table");
                 UserController userobj=new UserController();
-                userobj.controllerUser(connection,logger);
+                //userobj.controllerUser(connection,logger);
                 break;
             case 2:
                 System.out.println("You are inside the order");

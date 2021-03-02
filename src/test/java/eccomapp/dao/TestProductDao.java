@@ -37,14 +37,14 @@ public class TestProductDao {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
-        productDao.display(connection,logger);
+        productDao.display(connection);
     }
     @Test
     public void testGetUuid() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
-        productDao.getID(connection,"prashant");
+        productDao.getID(connection,productEntity);
 
     }
     @Test
@@ -57,7 +57,7 @@ public class TestProductDao {
     public  void testDelte() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        productDao.deleteProduct(connection,"prashant");
+        productDao.deleteProduct(connection,productEntity);
     }
     @Test
     public  void testUpdate() throws SQLException {
@@ -69,7 +69,7 @@ public class TestProductDao {
     public  void testUpdateProduct() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        productDao.updateQuantity(connection,"prashant",40,logger);
+        productDao.updateQuantity(connection,productEntity);
     }
     @Test
     public  void testGetTotalQuantity() throws SQLException {
@@ -81,7 +81,7 @@ public class TestProductDao {
     public  void testUpdateQuantity() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        productDao.updateQuantity(connection,"prashant",10,logger);
+        productDao.updateQuantity(connection,productEntity);
     }
     @Test
     public  void testGetTotalCostOrder() throws SQLException {

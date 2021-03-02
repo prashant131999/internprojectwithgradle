@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 /**The OrderDao class add the order ,delete order from database according to the inputs given in prepared
  *
@@ -20,10 +19,10 @@ public class OrderDao {
      * @param number for mobile number
      * @throws ApplicationRuntimeException
      */
-    public void addOrder(Connection connection,String name,String number) throws ApplicationRuntimeException {
+    public void addOrder(Connection connection,String name,String email) throws ApplicationRuntimeException {
         try {
             UserDao userDao=new UserDao();
-            UUID id = userDao.getID(connection, number);
+            UUID id = userDao.getID(connection, email);
             ProductDao productDao = new ProductDao();
             OrderEntity orderEntity = new OrderEntity();
             float totalCost = productDao.getTotalCostOrder(connection, name);
@@ -34,7 +33,7 @@ public class OrderDao {
             statement.setString(3, name);
             statement.setFloat(4, totalCost);
             statement.executeUpdate();
-            System.out.println("Total value of order is " + totalCost);
+//            System.out.println("Total value of order is " + totalCost);
         }
         catch (SQLException e)
         {
@@ -49,13 +48,13 @@ public class OrderDao {
      * @param name for product name
      * @throws ApplicationRuntimeException
      */
-    public void deleteOrder(Connection connection,Logger logger,String name) throws ApplicationRuntimeException {
+    public void deleteOrder(Connection connection,String name) throws ApplicationRuntimeException {
         try {
             String sql = "DELETE FROM orders WHERE product_list=?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, name);
             statement.executeUpdate();
-            logger.info("Order is deleted");
+//            logger.info("Order is deleted");
         }catch (SQLException e)
         {
             throw new ApplicationRuntimeException(400,"wrong product name",e.getCause());

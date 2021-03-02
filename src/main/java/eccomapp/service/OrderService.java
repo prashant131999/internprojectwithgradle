@@ -11,7 +11,6 @@ import eccomapp.util.Validator;
 
 import java.sql.Connection;
 import java.util.Scanner;
-import java.util.logging.Logger;
 
 /**
  * The OrderService class sends the create ,display,and delete order
@@ -55,19 +54,9 @@ public class OrderService {
      * @param logger     for logging
      * @param email      for email of user
      */
-    public void createOrder(Connection connection, Logger logger, String email) throws ApplicationRuntimeException, InvalidInputException {
+    public void createOrder(Connection connection, String email,String listOfProduct) throws ApplicationRuntimeException, InvalidInputException {
         validator.validateEmailAddress(email);
-        logger.info("Enter the  product name");
-        listOfProduct = sc.next();
-        userEntity.setEmail(email);
-        if (userDao.emailPresent(userEntity, connection)) {
-            orderEntity.setListOfProduct(listOfProduct);
-            orderDao.addOrder(connection, listOfProduct, email);
-            logger.info("Order placed");
-        } else {
-            logger.warning("You are not registered customer");
-        }
-
+        orderDao.addOrder(connection, listOfProduct, email);
     }
 
     /**
@@ -76,8 +65,8 @@ public class OrderService {
      * @param connection for connecting to database
      * @param logger     for logging
      */
-    public void displayOrder(Connection connection, Logger logger) throws ApplicationRuntimeException {
-        productDao.display(connection, logger);
+    public void displayOrder(Connection connection) throws ApplicationRuntimeException {
+        productDao.display(connection);
 
     }
 
@@ -88,8 +77,8 @@ public class OrderService {
      * @param logger     for logging
      * @param name       for name of product
      */
-    public void deleteOrder(Connection connection, Logger logger, String name) throws ApplicationRuntimeException {
-        orderDao.deleteOrder(connection, logger, name);
+    public void deleteOrder(Connection connection, String name) throws ApplicationRuntimeException {
+        orderDao.deleteOrder(connection, name);
 
     }
 }

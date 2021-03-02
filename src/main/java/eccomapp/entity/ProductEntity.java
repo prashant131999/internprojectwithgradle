@@ -6,7 +6,13 @@ public class ProductEntity {
     UUID prodid = UUID.randomUUID();
     private int quantity;
     private String prodName, prodType, prodDescription;
-    private float totalCost;
+    private float totalCost,cost;
+    public ProductEntity(int quantity,String prodName,float cost)
+    {
+        this.quantity=quantity;
+        this.prodName=prodName;
+        this.cost=cost;
+    }
     public ProductEntity ()
      {
      }
@@ -49,5 +55,13 @@ public class ProductEntity {
 
     public String getProdName() {
         return prodName;
+    }
+
+    public void setProductid(UUID prodid) {
+        this.prodid=prodid;
+    }
+
+    public float getCost() {
+        return cost;
     }
 }

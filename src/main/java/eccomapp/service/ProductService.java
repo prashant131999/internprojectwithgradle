@@ -8,7 +8,6 @@ import eccomapp.util.Validator;
 
 import java.sql.Connection;
 import java.util.Scanner;
-import java.util.logging.Logger;
 
 /**
  * The Product service class sends the data to Product Dao class to manipulate the database
@@ -42,22 +41,12 @@ public class ProductService {
      * @param logger     for logging
      * @throws ApplicationRuntimeException
      */
-    public void addproduct(Connection connection, Logger logger) throws ApplicationRuntimeException, InvalidInputException {
-        logger.info("Enter the product name to add");
-        prodName = sc.next();
-        productEntity.setProdName(prodName);
-        logger.info("Enter the product quantity");
-        quantity = sc.nextInt();
-        productEntity.setQuantity(quantity);
+    public void addproduct(Connection connection, ProductEntity productEntity) throws ApplicationRuntimeException, InvalidInputException {
+
         validator.validateQuantity(productEntity.getQuantity());
-        logger.info("Enter the cost of  product");
-        cost = sc.nextFloat();
-        totalCost = cost * productEntity.getQuantity();
+        totalCost = productEntity.getCost() * productEntity.getQuantity();
         productEntity.setTotalCost(totalCost);
         productDao.addProduct(productEntity, connection);
-        logger.info("Product added in the cart");
-
-
     }
 
     /**
@@ -67,12 +56,11 @@ public class ProductService {
      * @param name       name of product to delete
      * @param logger     for logging
      */
-    public void deleteProduct(Connection connection, String name, Logger logger) {
-        productDao.deleteProduct( connection, name);
+    public void deleteProduct(Connection connection, ProductEntity productEntity) {
+        productDao.deleteProduct( connection, productEntity);
         int addedquantity = 0;
-        addedquantity = productDao.getQuantity(connection, name);
+        addedquantity = productDao.getQuantity(connection, productEntity.getProdName());
         validator.addQuantity(addedquantity);
-        logger.info("Product deleted");
     }
 
     /**
@@ -84,11 +72,9 @@ public class ProductService {
      * @param logger        for logging
      */
 
-    public void updateProductName(Connection connection, String newName, String oldName,
-                                  Logger logger) throws ApplicationRuntimeException {
-        productEntity.setProdName(newName);
+    public void updateProductName(Connection connection, String newName, String oldName) throws ApplicationRuntimeException {
         productDao.updateProductName(connection, newName, oldName);
-        logger.info("Product name updated");
+        //logger.info("Product name updated");
 
     }
 
@@ -100,11 +86,9 @@ public class ProductService {
      * @param quantity   for the new quantity
      * @param logger     for logging
      */
-    public void updateProductQuantity(Connection connection, String name, int quantity,
-                                      Logger logger) throws ApplicationRuntimeException, InvalidInputException {
+    public void updateProductQuantity(Connection connection, ProductEntity productEntity) throws ApplicationRuntimeException, InvalidInputException {
         validator.validateQuantity(productEntity.getQuantity());
-        productDao.updateQuantity(connection, name, quantity, logger);
-        logger.info("product quantity updated");
+        productDao.updateQuantity(connection, productEntity);
     }
 
 

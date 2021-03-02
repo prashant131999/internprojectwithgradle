@@ -29,17 +29,17 @@ public class OrderController {
         switch (choice) {
             case 1:
                 try {
-               orderService.displayOrder(connection, logger);
+               orderService.displayOrder(connection);
                 }catch (ApplicationRuntimeException e){
                     e.logError();
                 }
                 break;
             case 2:
                 System.out.println("Enter the email of user");
-
+                String listofProduct= sc.next();
                 String email=sc.next();
                 try {
-                    orderService.createOrder(connection, logger, email);
+                    orderService.createOrder(connection,email,listofProduct);
                 }catch (ApplicationRuntimeException e){
                     e.logError();
                 } catch (InvalidInputException e) {
@@ -50,7 +50,7 @@ public class OrderController {
                 System.out.println("Enter the name of product to delete");
                 String name=sc.next();
                 try {
-                    orderService.deleteOrder(connection, logger, name);
+                    orderService.deleteOrder(connection,name);
                 }catch (ApplicationRuntimeException e){
                     e.logError();
                 }

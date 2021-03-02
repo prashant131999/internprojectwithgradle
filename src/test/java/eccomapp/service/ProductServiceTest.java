@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import java.sql.Connection;
 import java.util.logging.Logger;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 public class ProductServiceTest {
@@ -25,18 +26,25 @@ public class ProductServiceTest {
         productService = new ProductService(productDao,validator,productEntity);
     }
     @Test
+    public void testAddProduct() throws InvalidInputException {
+        doNothing().when(validator).validateQuantity(20);
+        when(productEntity.getCost()).thenReturn(40.5F);
+        when(productEntity.getQuantity()).thenReturn(2);
+        productService.addproduct(connection,productEntity);
+    }
+    @Test
     public void testDeleteProduct()
     {
         when(productDao.getQuantity(connection,"prashant")).thenReturn(1);
-        productService.deleteProduct(connection,"prashant",logger);
+        productService.deleteProduct(connection,productEntity);
     }
     @Test
     public void testUpdateProduct()
     {
-        productService.updateProductName(connection,"prajuwal","prashant",logger);
+        productService.updateProductName(connection,"prajuwal","prashant");
     }
     @Test
     public void testUpdateQuantity() throws InvalidInputException {
-        productService.updateProductQuantity(connection,"prashant",12,logger);
+        productService.updateProductQuantity(connection,productEntity);
     }
 }

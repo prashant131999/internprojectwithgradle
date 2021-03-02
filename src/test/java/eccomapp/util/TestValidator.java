@@ -7,16 +7,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestValidator {
-    private static Validator validator;
+    private static  Validator validator;
     @BeforeAll
     public static void setup() {
         validator = new Validator();
     }
 
-    @Test
-    public void testValidateMobileNumber() throws InvalidInputException {
-        assertEquals(true, validator.validateMobileNumber("9639402926"));
-    }
+
     @Test
     public void testMobileNumber()
     {
@@ -28,6 +25,10 @@ public class TestValidator {
         }
         assertTrue(thrown);
     }
+    @Test
+    public void testValidateMobileNumber() throws InvalidInputException {
+        assertEquals(true, validator.validateMobileNumber("9639402926"));
+    }
 
 
     @Test
@@ -36,7 +37,7 @@ public class TestValidator {
     }
 
     @Test
-    public void testEmail() throws InvalidInputException {
+    public void testEmail() {
         assertEquals(false, validator.isValidEmail("prashant"));
     }
 

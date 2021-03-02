@@ -30,7 +30,7 @@ public class ProductController {
 
             case 1:
                 try {
-                    productService.addproduct(connection,logger);
+                    productService.addproduct(connection,productEntity);
                 } catch (ApplicationRuntimeException e){
                     e.logError();
                 } catch (InvalidInputException e) {
@@ -42,7 +42,7 @@ public class ProductController {
                 System.out.println("Enter the name of product to delete");
                 String namep=sc.next();
                 try {
-                    productService.deleteProduct( connection, namep, logger);
+                    productService.deleteProduct( connection,productEntity);
                 }catch (ApplicationRuntimeException e){
                     e.logError();
                 }
@@ -59,7 +59,7 @@ public class ProductController {
                         System.out.println("Enter the new name of product");
                         String newName=sc.next();
                         try {
-                            productService.updateProductName( connection, newName, oldName, logger);
+                            productService.updateProductName( connection,newName,oldName);
                         }catch (ApplicationRuntimeException e){
                             e.logError();
                         }
@@ -74,7 +74,7 @@ public class ProductController {
                         System.out.println("enter the new quantity");
                         int quant=sc.nextInt();
                         try {
-                            productService.updateProductQuantity(connection, names, quant, logger);
+                            productService.updateProductQuantity(connection,productEntity);
                         }catch (ApplicationRuntimeException e){
                             e.logError();
                         } catch (InvalidInputException e) {

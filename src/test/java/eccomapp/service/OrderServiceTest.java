@@ -5,6 +5,7 @@ import eccomapp.dao.ProductDao;
 import eccomapp.dao.UserDao;
 import eccomapp.entity.OrderEntity;
 import eccomapp.entity.UserEntity;
+import eccomapp.exception.InvalidInputException;
 import eccomapp.util.Validator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,15 +29,19 @@ public class OrderServiceTest {
     public static void setup() {
         orderService = new OrderService(orderDao, productDao, orderEntity, validator, userDao, userEntity);
     }
+    @Test
+    public void testAddOrder() throws InvalidInputException {
+        orderService.createOrder(connection,"prashant@gmail.com","laptop");
+    }
 
     @Test
     public void testdelete() {
-        orderService.deleteOrder(connection, logger, "Prashant");
+        orderService.deleteOrder(connection,"prashant");
     }
 
     @Test
     public void testDisplay() {
-        orderService.displayOrder(connection, logger);
+        orderService.displayOrder(connection);
     }
 
 }
