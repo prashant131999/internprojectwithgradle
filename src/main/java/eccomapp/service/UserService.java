@@ -82,7 +82,6 @@ public class UserService {
      */
     public void updateUser(Connection connection, UserEntity userEntity) throws ApplicationRuntimeException {
         if (cache.contains(userEntity.getMobileNumber())) {
-            cache.delete(userEntity.getMobileNumber());
             cache.put(userEntity.getAddress(), userEntity);
             userDao.updateUser(userEntity, connection);
         } else {

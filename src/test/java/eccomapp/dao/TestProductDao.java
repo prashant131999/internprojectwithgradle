@@ -1,7 +1,8 @@
 package eccomapp.dao;
 
 import eccomapp.entity.ProductEntity;
-import org.junit.jupiter.api.BeforeAll;
+import eccomapp.exception.ApplicationRuntimeException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -11,18 +12,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class TestProductDao {
-    private static Connection connection= Mockito.mock(Connection.class);
-    private static PreparedStatement preparedStatement=Mockito.mock(PreparedStatement.class);
-    private static ResultSet resultSet=Mockito.mock(ResultSet.class);
-    private static ProductEntity productEntity=Mockito.mock(ProductEntity.class);
-    private static Logger logger=Mockito.mock(Logger.class);
-    private static ProductDao productDao;
-    @BeforeAll
-    public static void setup()
+    private  Connection connection= Mockito.mock(Connection.class);
+    private  PreparedStatement preparedStatement=Mockito.mock(PreparedStatement.class);
+    private  ResultSet resultSet=Mockito.mock(ResultSet.class);
+    private  ProductEntity productEntity=Mockito.mock(ProductEntity.class);
+    private  Logger logger=Mockito.mock(Logger.class);
+    private  ProductDao productDao;
+    @BeforeEach
+    public  void setup()
     {
         productDao=new ProductDao();
     }
@@ -88,6 +90,47 @@ public class TestProductDao {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         productDao.getTotalCostOrder(connection,"prashant");
+    }
+    @Test
+    public void testWrongDisplay() throws SQLException {
+        try {
+            when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+            when(preparedStatement.executeQuery()).thenThrow(new SQLException());
+            productDao.display(connection);
+        } catch (ApplicationRuntimeException e) {
+            assertEquals("invalid input",e.getErrorMessage());
+        }
+    }
+    @Test
+    public void testWrongGetId() throws SQLException {
+        try {
+            when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+            when(preparedStatement.executeQuery()).thenThrow(new SQLException());
+            productDao.getID(connection,productEntity);
+        } catch (ApplicationRuntimeException e) {
+            assertEquals("wrong product name",e.getErrorMessage());
+        }
+    }
+    @Test
+    public void testWrongGetQuantity() throws SQLException {
+        try {
+            when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+            when(preparedStatement.executeQuery()).thenThrow(new SQLException());
+            productDao.getQuantity(connection,"laptop");
+        } catch (ApplicationRuntimeException e) {
+            assertEquals("wrong product name",e.getErrorMessage());
+        }
+    }
+    @Test
+    public void testWrongDeleteProduct() throws SQLException {
+        try {
+            when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            when(preparedStatement.executeUpdate()).thenThrow(new SQLException());
+            productDao.deleteProduct(connection,productEntity);
+        } catch (ApplicationRuntimeException e) {
+            assertEquals("product id",e.getErrorMessage());
+        }
     }
 
 }

@@ -3,6 +3,8 @@ package eccomapp.api;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.InvalidInputException;
 import eccomapp.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -11,40 +13,36 @@ import java.util.UUID;
 @RequestMapping("/user")
 @RestController
 public class UserControllerApi {
-    static java.sql.Connection connection = eccomapp.util.Connection.create();
-    UserService userService = new UserService();
+    private static java.sql.Connection connection = eccomapp.util.Connection.create();
+    private UserService userService = new UserService();
 
-    @GetMapping("/prashant")
-    public String helloPrint() {
-        return "hello";
-    }
 
-    @PostMapping("/db")
-    public String createUser(@Valid @RequestBody UserEntity userEntity) {
+    @PostMapping("/add")
+    public ResponseEntity createUser(@Valid @RequestBody UserEntity userEntity) {
         try {
             userEntity.setUserid(UUID.randomUUID());
             userService.addUser(connection, userEntity);
-            return "User Added Successfully";
+            return new ResponseEntity("User Added",HttpStatus.OK);
         } catch (InvalidInputException e) {
             e.logError();
         }
-        return "Not added to database";
+        return new ResponseEntity("user not added", HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/deleted")
-    public String deleteUser(@Valid @RequestBody UserEntity userEntity) {
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteUser(@Valid @RequestBody UserEntity userEntity) {
         try {
             userEntity.setUserid(UUID.randomUUID());
             userService.deleteUser(connection, userEntity);
-            return "User Deleted";
+            return new ResponseEntity("User deleted",HttpStatus.OK);
         } catch (InvalidInputException e) {
             e.logError();
         }
-        return "User not present in  database";
+        return new ResponseEntity("User not deleted",HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/updatedDetails")
-    public String updateUser(@Valid @RequestBody UserEntity userEntity) {
+    public ResponseEntity updateUser(@Valid @RequestBody UserEntity userEntity) {
         boolean flag = true;
         userEntity.setUserid(UUID.randomUUID());
         if (flag) {
@@ -52,9 +50,9 @@ public class UserControllerApi {
             flag = false;
         }
         if (flag) {
-            return "user address not updated";
+            return new ResponseEntity("user address not updated",HttpStatus.BAD_REQUEST);
         }
-        return "user address updated";
+        return new ResponseEntity("user address updated",HttpStatus.OK);
 
     }
 

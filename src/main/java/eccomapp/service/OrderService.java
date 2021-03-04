@@ -51,7 +51,6 @@ public class OrderService {
      * This method place the order by taking product name and email from user
      *
      * @param connection for connecting
-     * @param logger     for logging
      * @param email      for email of user
      */
     public void createOrder(Connection connection, String email,String listOfProduct) throws ApplicationRuntimeException, InvalidInputException {
@@ -63,7 +62,6 @@ public class OrderService {
      * This method display the list of products to purchase from
      *
      * @param connection for connecting to database
-     * @param logger     for logging
      */
     public void displayOrder(Connection connection) throws ApplicationRuntimeException {
         productDao.display(connection);
@@ -74,7 +72,6 @@ public class OrderService {
      * This method delete the order by taking name of product
      *
      * @param connection for connecting to database
-     * @param logger     for logging
      * @param name       for name of product
      */
     public void deleteOrder(Connection connection, String name) throws ApplicationRuntimeException {

@@ -14,6 +14,8 @@ import org.mockito.Mockito;
 import java.sql.Connection;
 import java.util.logging.Logger;
 
+import static org.mockito.Mockito.doNothing;
+
 public class OrderServiceTest {
     private static UserDao userDao = Mockito.mock(UserDao.class);
     private static Connection connection = Mockito.mock(Connection.class);
@@ -31,6 +33,7 @@ public class OrderServiceTest {
     }
     @Test
     public void testAddOrder() throws InvalidInputException {
+        doNothing().when(validator).validateEmailAddress("prashant@gmail.com");
         orderService.createOrder(connection,"prashant@gmail.com","laptop");
     }
 

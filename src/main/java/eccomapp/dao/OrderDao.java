@@ -33,7 +33,6 @@ public class OrderDao {
             statement.setString(3, name);
             statement.setFloat(4, totalCost);
             statement.executeUpdate();
-//            System.out.println("Total value of order is " + totalCost);
         }
         catch (SQLException e)
         {
@@ -44,7 +43,6 @@ public class OrderDao {
     /**This method delete order from the database using product name
      *
      * @param connection for connection to database
-     * @param logger for logging
      * @param name for product name
      * @throws ApplicationRuntimeException
      */
@@ -54,7 +52,6 @@ public class OrderDao {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, name);
             statement.executeUpdate();
-//            logger.info("Order is deleted");
         }catch (SQLException e)
         {
             throw new ApplicationRuntimeException(400,"wrong product name",e.getCause());

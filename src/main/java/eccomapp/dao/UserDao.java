@@ -76,6 +76,7 @@ public class UserDao {
         } catch (SQLException e) {
             throw new ApplicationRuntimeException(400, "wrong mail", e.getCause());
         }
+
         return false;
     }
     public void deleteUser(UserEntity userEntity, Connection connection) throws ApplicationRuntimeException {
@@ -89,4 +90,5 @@ public class UserDao {
             throw new ApplicationRuntimeException(400, "wrong mail entered", e.getCause());
         }
     }
+
 }
