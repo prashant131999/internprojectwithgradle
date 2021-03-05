@@ -2,6 +2,7 @@ package eccomapp.dao;
 
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
+import eccomapp.exception.InvalidInputException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -60,7 +61,7 @@ public class TestUserDao {
     }
 
     @Test
-    public void testDeleteUser() throws SQLException {
+    public void testDeleteUser() throws SQLException, InvalidInputException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         userDao.deleteUser(userEntity, connection);
@@ -100,7 +101,7 @@ public class TestUserDao {
         }
     }
     @Test
-    public void testWrongDeleteUser() throws SQLException {
+    public void testWrongDeleteUser() throws SQLException, InvalidInputException {
         try {
             when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
             when(preparedStatement.executeUpdate()).thenThrow(new SQLException());

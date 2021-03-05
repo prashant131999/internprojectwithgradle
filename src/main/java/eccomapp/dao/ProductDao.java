@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**The ProductDao add the products ,display products ,get id from product database.
@@ -39,22 +41,23 @@ public class ProductDao {
     /** This method display the products
      *
      * @param connection for connection
-     * @param logger for logging
      * @throws ApplicationRuntimeException
      */
-    public void display(Connection connection) throws ApplicationRuntimeException {
+    public List<ProductEntity> display(Connection connection) throws ApplicationRuntimeException {
+
         try {
+            List<ProductEntity>products=new ArrayList<>();
             String sql = "SELECT * FROM products ";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
-            int count = 1;
             while (rs.next()) {
                 String name = rs.getString("product_name");
                 int quant = rs.getInt("prod_quantity");
                 float totalcost = rs.getFloat("product_cost");
-                System.out.println("products are  " + count + " " + name + " " + "quantity is  " + quant + "total cost   " + totalcost);
-                count++;
+                ProductEntity productEntity=new ProductEntity(quant,name,totalcost);
+                products.add(productEntity);
             }
+            return products;
         }catch (SQLException e)
         {
             throw new ApplicationRuntimeException(400,"invalid input",e.getCause());

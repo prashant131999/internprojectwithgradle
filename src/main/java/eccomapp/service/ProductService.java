@@ -8,6 +8,7 @@ import eccomapp.util.Validator;
 
 import java.sql.Connection;
 import java.util.Scanner;
+import java.util.UUID;
 
 /**
  * The Product service class sends the data to Product Dao class to manipulate the database
@@ -42,7 +43,7 @@ public class ProductService {
      * @throws ApplicationRuntimeException
      */
     public void addproduct(Connection connection, ProductEntity productEntity) throws ApplicationRuntimeException, InvalidInputException {
-
+        productEntity.setProductid(UUID.randomUUID());
         validator.validateQuantity(productEntity.getQuantity());
         totalCost = productEntity.getCost() * productEntity.getQuantity();
         productEntity.setTotalCost(totalCost);
@@ -57,6 +58,7 @@ public class ProductService {
      * @param logger     for logging
      */
     public void deleteProduct(Connection connection, ProductEntity productEntity) {
+        productEntity.setProductid(UUID.randomUUID());
         productDao.deleteProduct( connection, productEntity);
         int addedquantity = 0;
         addedquantity = productDao.getQuantity(connection, productEntity.getProdName());
@@ -69,12 +71,10 @@ public class ProductService {
      * @param connection    for connection
      * @param newName       for new name of product
      * @param oldName       for old name of product
-     * @param logger        for logging
      */
 
-    public void updateProductName(Connection connection, String newName, String oldName) throws ApplicationRuntimeException {
+    public void updateProductName(Connection connection, String newName, String oldName) throws ApplicationRuntimeException,InvalidInputException {
         productDao.updateProductName(connection, newName, oldName);
-        //logger.info("Product name updated");
 
     }
 
@@ -87,6 +87,7 @@ public class ProductService {
      * @param logger     for logging
      */
     public void updateProductQuantity(Connection connection, ProductEntity productEntity) throws ApplicationRuntimeException, InvalidInputException {
+        productEntity.setProductid(UUID.randomUUID());
         validator.validateQuantity(productEntity.getQuantity());
         productDao.updateQuantity(connection, productEntity);
     }

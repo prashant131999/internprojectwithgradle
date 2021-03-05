@@ -39,8 +39,7 @@ public class ProductServiceTest {
         productService.deleteProduct(connection,productEntity);
     }
     @Test
-    public void testUpdateProduct()
-    {
+    public void testUpdateProduct() throws InvalidInputException {
         productService.updateProductName(connection,"prajuwal","prashant");
     }
     @Test

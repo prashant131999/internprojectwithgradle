@@ -5,13 +5,13 @@ import java.util.UUID;
 public class ProductEntity {
     UUID prodid = UUID.randomUUID();
     private int quantity;
-    private String prodName, prodType, prodDescription;
+    private String prodName, prodType;
     private float totalCost,cost;
-    public ProductEntity(int quantity,String prodName,float cost)
+    public ProductEntity(int quantity,String prodName,float totalCost)
     {
         this.quantity=quantity;
         this.prodName=prodName;
-        this.cost=cost;
+        this.totalCost=totalCost;
     }
     public ProductEntity ()
      {
@@ -19,10 +19,6 @@ public class ProductEntity {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public void setProdDescription(String prodDedcription) {
-        this.prodDescription = prodDescription;
     }
 
     public void setProdName(String prodName) {
@@ -43,10 +39,6 @@ public class ProductEntity {
 
     public float getTotalCost() {
         return totalCost;
-    }
-
-    public String getProdDescription() {
-        return prodDescription;
     }
 
     public int getQuantity() {

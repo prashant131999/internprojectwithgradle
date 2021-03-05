@@ -38,12 +38,12 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void testdelete() {
+    public void testdelete() throws InvalidInputException {
         orderService.deleteOrder(connection,"prashant");
     }
 
     @Test
-    public void testDisplay() {
+    public void testDisplay() throws InvalidInputException {
         orderService.displayOrder(connection);
     }
 

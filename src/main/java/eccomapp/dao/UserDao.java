@@ -2,6 +2,7 @@ package eccomapp.dao;
 
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -79,11 +80,10 @@ public class UserDao {
 
         return false;
     }
-    public void deleteUser(UserEntity userEntity, Connection connection) throws ApplicationRuntimeException {
+    public void deleteUser(UserEntity userEntity, Connection connection) throws ApplicationRuntimeException  {
         try {
             String sql = "DELETE FROM customer WHERE email=?";
-            PreparedStatement statement = null;
-            statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, userEntity.getEmail());
             statement.executeUpdate();
         } catch (SQLException e) {

@@ -4,13 +4,16 @@ import eccomapp.dao.OrderDao;
 import eccomapp.dao.ProductDao;
 import eccomapp.dao.UserDao;
 import eccomapp.entity.OrderEntity;
+import eccomapp.entity.ProductEntity;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
 import eccomapp.util.Validator;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 /**
  * The OrderService class sends the create ,display,and delete order
@@ -54,6 +57,7 @@ public class OrderService {
      * @param email      for email of user
      */
     public void createOrder(Connection connection, String email,String listOfProduct) throws ApplicationRuntimeException, InvalidInputException {
+        orderEntity.setOrderid(UUID.randomUUID());
         validator.validateEmailAddress(email);
         orderDao.addOrder(connection, listOfProduct, email);
     }
@@ -63,8 +67,8 @@ public class OrderService {
      *
      * @param connection for connecting to database
      */
-    public void displayOrder(Connection connection) throws ApplicationRuntimeException {
-        productDao.display(connection);
+    public List<ProductEntity> displayOrder(Connection connection) throws ApplicationRuntimeException,InvalidInputException {
+       return  productDao.display(connection);
 
     }
 
@@ -74,7 +78,7 @@ public class OrderService {
      * @param connection for connecting to database
      * @param name       for name of product
      */
-    public void deleteOrder(Connection connection, String name) throws ApplicationRuntimeException {
+    public void deleteOrder(Connection connection, String name) throws ApplicationRuntimeException,InvalidInputException {
         orderDao.deleteOrder(connection, name);
 
     }
