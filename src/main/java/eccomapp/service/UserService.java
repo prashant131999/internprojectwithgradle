@@ -5,6 +5,7 @@ import eccomapp.dao.UserDao;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.UserModel;
 import eccomapp.util.Validator;
 
 import java.sql.Connection;
@@ -20,12 +21,14 @@ public class UserService {
     private UserDao userDao;
     private Validator validator;
     private Cache cache;
+    private UserModel userModel;
 
-    public UserService(UserEntity userEntity, UserDao userDao, Validator validator, Cache cache) {
+    public UserService(UserEntity userEntity, UserDao userDao, Validator validator, Cache cache, UserModel userModel) {
         this.userEntity = userEntity;
         this.userDao = userDao;
         this.validator = validator;
         this.cache = cache;
+        this.userModel=userModel;
     }
 
     public UserService() {
@@ -33,6 +36,7 @@ public class UserService {
         userDao = new UserDao();
         validator = new Validator();
         cache = new Cache(10);
+        userModel=new UserModel();
     }
 
 
@@ -65,14 +69,15 @@ public class UserService {
      * @param logger     for logging
      */
 
-    public void deleteUser(Connection connection, UserEntity userEntity) throws ApplicationRuntimeException, InvalidInputException {
-        userEntity.setUserid(UUID.randomUUID());
-        validator.validateEmailAddress(userEntity.getEmail());
-        if (cache.contains(userEntity.getEmail())) {
-            cache.delete(userEntity.getEmail());
-            userDao.deleteUser(userEntity, connection);
+    public void deleteUser(Connection connection, String email) throws ApplicationRuntimeException, InvalidInputException {
+        validator.validateEmailAddress(email);
+        if (cache.contains(email)) {
+            cache.delete(email);
+            userDao.deleteUser(email, connection);
         }
-        userDao.deleteUser(userEntity, connection);
+        else {
+            userDao.deleteUser(email, connection);
+        }
 
     }
 
@@ -84,15 +89,18 @@ public class UserService {
      * @param userEntity for userEntity object
      * @throws ApplicationRuntimeException
      */
-    public void updateUser(Connection connection, UserEntity userEntity) throws ApplicationRuntimeException {
-        userEntity.setUserid(UUID.randomUUID());
-        if (cache.contains(userEntity.getMobileNumber())) {
-            cache.put(userEntity.getAddress(), userEntity);
-            userDao.updateUser(userEntity, connection);
-        } else {
-            userDao.updateUser(userEntity, connection);
-        }
+    public void updateUser(Connection connection, UserModel userModel) throws ApplicationRuntimeException,InvalidInputException {
+            if (cache.contains(userModel.getEmail())) {
+                cache.put(userModel.getAddress(), userEntity);
+                userDao.updateUser(userModel, connection);
+            } else {
+                userDao.updateUser(userModel, connection);
+            }
 
+
+    }
+    public UserEntity displayUsers(String email,Connection connection)throws ApplicationRuntimeException,InvalidInputException {
+        return userDao.displayUsersToDb(email, connection);
     }
 
 }

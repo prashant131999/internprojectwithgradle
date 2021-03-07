@@ -3,6 +3,7 @@ package eccomapp.dao;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.UserModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,6 +24,7 @@ public class TestUserDao {
     private UserEntity userEntity = Mockito.mock(UserEntity.class);
     private PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
     private ResultSet resultSet = Mockito.mock(ResultSet.class);
+    private UserModel userModel=Mockito.mock(UserModel.class);
 
     @BeforeEach
     public  void setup() {
@@ -48,7 +50,7 @@ public class TestUserDao {
     public void testUpdate() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        userDao.updateUser(userEntity, connection);
+        userDao.updateUser(userModel,connection);
     }
 
     @Test
@@ -64,7 +66,7 @@ public class TestUserDao {
     public void testDeleteUser() throws SQLException, InvalidInputException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        userDao.deleteUser(userEntity, connection);
+        userDao.deleteUser("prashant@gmail.com",connection);
     }
 
     @Test
@@ -85,9 +87,9 @@ public class TestUserDao {
         try {
             when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
             when(preparedStatement.executeUpdate()).thenThrow(new SQLException());
-            userDao.updateUser(userEntity,connection);
+            userDao.updateUser(userModel,connection);
         } catch (ApplicationRuntimeException e) {
-            assertEquals("wrong mail",e.getErrorMessage());
+            assertEquals("wrong mobile number",e.getErrorMessage());
         }
     }
     @Test
@@ -105,9 +107,9 @@ public class TestUserDao {
         try {
             when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
             when(preparedStatement.executeUpdate()).thenThrow(new SQLException());
-            userDao.deleteUser(userEntity, connection);
+            userDao.deleteUser("prashant@gmail.com", connection);
         } catch (ApplicationRuntimeException e) {
-            assertEquals("wrong mail entered",e.getErrorMessage());
+            assertEquals("User Cant be deleted",e.getErrorMessage());
         }
     }
     @Test

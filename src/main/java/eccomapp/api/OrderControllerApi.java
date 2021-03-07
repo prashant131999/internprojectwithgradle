@@ -1,10 +1,15 @@
 package eccomapp.api;
 
 import eccomapp.entity.OrderEntity;
-import eccomapp.entity.ProductEntity;
+import eccomapp.entity.UserEntity;
+import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.OrderDisplay;
 import eccomapp.model.OrderModel;
+import eccomapp.model.ProductModel;
 import eccomapp.service.OrderService;
+import eccomapp.service.ProductService;
+import eccomapp.service.UserService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
@@ -12,13 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RequestMapping("/order")
 @RestController
 public class OrderControllerApi {
     private static java.sql.Connection connection = eccomapp.util.Connection.create();
     private OrderService orderService = new OrderService();
+    private UserService userService = new UserService();
+    private ProductService productService=new ProductService();
     private OrderEntity orderEntity = new OrderEntity();
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
@@ -31,9 +37,18 @@ public class OrderControllerApi {
     public ResponseEntity addOrder(@Valid @RequestBody OrderModel orderModel) {
         String email = orderModel.getEmail();
         String name = orderModel.getName();
+        UserEntity userEntity=null;
+        ProductModel productModel=null;
         try {
-            orderService.createOrder(connection, email, name);
+            userEntity=userService.displayUsers(email,connection);
+            productModel=productService.displayProducts(name,connection);
+            if(userEntity!=null && productModel!=null) {
+                orderService.createOrder(connection, email, name);
+            }
         } catch (InvalidInputException e) {
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch (ApplicationRuntimeException e) {
             return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity("order placed", HttpStatus.OK);
@@ -44,17 +59,18 @@ public class OrderControllerApi {
             @ApiResponse(code = 403, message = "forbidden!!!"),
             @ApiResponse(code = 404, message = "not found in database!!!"),
             @ApiResponse(code = 500, message = "sql exception")})
-
-
-    @GetMapping("/displayProducts")
-    public ResponseEntity productsInCart() {
-    List<ProductEntity> productList;
+    @GetMapping("/displayOrderDetail/{prodName}")
+    public ResponseEntity orderDetail( @PathVariable String prodName) {
+        OrderDisplay orders;
         try {
-            productList=orderService.displayOrder(connection);
+            orders=orderService.displayOrderDetail(prodName,connection);
         } catch (InvalidInputException e) {
             return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(productList,HttpStatus.OK);
+        catch (ApplicationRuntimeException e) {
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(orders,HttpStatus.OK);
     }
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
@@ -64,10 +80,17 @@ public class OrderControllerApi {
             @ApiResponse(code = 500, message = "sql exception")})
 
     @DeleteMapping("/deleteOrder/{name}")
-    public ResponseEntity updateProduct(@Valid @PathVariable String name) {
+    public ResponseEntity deleteOrder(@Valid @PathVariable String name) {
+        OrderDisplay orderDisplay=null;
         try {
-            orderService.deleteOrder(connection, name);
+            orderDisplay=orderService.displayOrderDetail(name,connection);
+            if(orderDisplay!=null) {
+                orderService.deleteOrder(connection, name);
+            }
         } catch (InvalidInputException e) {
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch (ApplicationRuntimeException e) {
             return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity("order deleted", HttpStatus.OK);

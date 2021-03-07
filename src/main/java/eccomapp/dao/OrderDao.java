@@ -2,10 +2,9 @@ package eccomapp.dao;
 
 import eccomapp.entity.OrderEntity;
 import eccomapp.exception.ApplicationRuntimeException;
+import eccomapp.model.OrderDisplay;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.UUID;
 
 /**The OrderDao class add the order ,delete order from database according to the inputs given in prepared
@@ -56,6 +55,27 @@ public class OrderDao {
         {
             throw new ApplicationRuntimeException(400,"wrong product name",e.getCause());
         }
+    }
+    public OrderDisplay displayUsersToDb(String name, Connection connection) throws ApplicationRuntimeException {
+
+        try {
+            String q = "select * from orders where product_list=?";
+            PreparedStatement pstmt = connection.prepareStatement(q);
+            pstmt.setString(1, name);
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            UUID orderId = (UUID) rs.getObject(1);
+            UUID customerId = (UUID) rs.getObject(2);
+            String prodName = rs.getString(3);
+            float totalValue = rs.getFloat(4);
+            OrderDisplay orderDisplay=new OrderDisplay(prodName,totalValue,customerId,orderId);
+            return orderDisplay;
+
+
+        } catch (SQLException e) {
+            throw new ApplicationRuntimeException(500, "Order not present in database", e);
+        }
+
     }
 
 }

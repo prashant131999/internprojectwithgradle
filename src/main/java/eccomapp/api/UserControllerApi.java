@@ -1,7 +1,9 @@
 package eccomapp.api;
 
 import eccomapp.entity.UserEntity;
+import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.UserModel;
 import eccomapp.service.UserService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -19,8 +21,6 @@ public class UserControllerApi {
 
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success|OK"),
-        @ApiResponse(code = 401, message = "not authorized!"),
-        @ApiResponse(code = 403, message = "forbidden!!!"),
         @ApiResponse(code = 404, message = "not found in database!!!"),
         @ApiResponse(code = 500, message = "sql exception")})
 
@@ -36,38 +36,70 @@ public class UserControllerApi {
     }
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
-            @ApiResponse(code = 401, message = "not authorized!"),
-            @ApiResponse(code = 403, message = "forbidden!!!"),
             @ApiResponse(code = 404, message = "not found in database!!!"),
             @ApiResponse(code = 500, message = "sql exception")})
 
-    @DeleteMapping("/delete")
-    public ResponseEntity deleteUser(@Valid @RequestBody UserEntity userEntity) {
+    @DeleteMapping("/delete/{email}")
+    public ResponseEntity deleteUser(@Valid @PathVariable String email) {
+
+        UserEntity userEntity=null;
         try {
-            userService.deleteUser(connection, userEntity);
+            userEntity=userService.displayUsers(email,connection);
+            if(userEntity!=null) {
+                userService.deleteUser(connection, email);
+            }
+            else
+            {
+                return new ResponseEntity("User not exist",HttpStatus.BAD_REQUEST);
+            }
         } catch (InvalidInputException e) {
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
+        }
+        catch (ApplicationRuntimeException e)
+        {
             return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity("User deleted",HttpStatus.OK);
     }
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
-            @ApiResponse(code = 401, message = "not authorized!"),
-            @ApiResponse(code = 403, message = "forbidden!!!"),
             @ApiResponse(code = 404, message = "not found in database!!!"),
             @ApiResponse(code = 500, message = "sql exception")})
     @PutMapping("/updatedDetails")
-    public ResponseEntity updateUser(@Valid @RequestBody UserEntity userEntity) {
-        boolean flag = true;
-        if (flag) {
-            userService.updateUser(connection, userEntity);
-            flag = false;
+    public ResponseEntity updateUser(@Valid @RequestBody UserModel userModel) {
+        UserEntity userEntity=null;
+        try {
+            userEntity=userService.displayUsers(userModel.getEmail(),connection);
+            if(userEntity!=null) {
+                userService.updateUser(connection,userModel);
+            }
+            else
+            {
+                return new ResponseEntity("User not exist",HttpStatus.BAD_REQUEST);
+            }
+        } catch (InvalidInputException e) {
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
         }
-        if (flag) {
-            return new ResponseEntity("user address not updated",HttpStatus.BAD_REQUEST);
+        catch (ApplicationRuntimeException e)
+        {
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity("user address updated",HttpStatus.OK);
+        return new ResponseEntity("User updated",HttpStatus.OK);
 
+    }
+    @GetMapping("/displayUserDetail/{email}")
+    public ResponseEntity userDetail(@Valid @PathVariable String email) {
+        UserEntity user;
+        try {
+            user=userService.displayUsers(email,connection);
+        } catch (InvalidInputException e) {
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch (ApplicationRuntimeException e)
+        {
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(user,HttpStatus.OK);
     }
 
 }

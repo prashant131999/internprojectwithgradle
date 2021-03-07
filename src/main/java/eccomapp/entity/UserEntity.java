@@ -10,7 +10,7 @@ public class UserEntity {
 
     private String dateOfBirth, email, address,fname, dateCreated, dateLastUpdated, mobileNumber;
 
-    UUID userid = UUID.randomUUID();
+    UUID userid ;
     public UserEntity(String fname,String lname,String email,String dateOfBirth,String address
     ,String mobileNumber)
     {
@@ -23,7 +23,6 @@ public class UserEntity {
     }
     public UserEntity()
     {
-
     }
 
     public void setDateCreated(String dateCreated) {

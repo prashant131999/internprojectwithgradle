@@ -4,14 +4,13 @@ import eccomapp.dao.OrderDao;
 import eccomapp.dao.ProductDao;
 import eccomapp.dao.UserDao;
 import eccomapp.entity.OrderEntity;
-import eccomapp.entity.ProductEntity;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.OrderDisplay;
 import eccomapp.util.Validator;
 
 import java.sql.Connection;
-import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -63,16 +62,6 @@ public class OrderService {
     }
 
     /**
-     * This method display the list of products to purchase from
-     *
-     * @param connection for connecting to database
-     */
-    public List<ProductEntity> displayOrder(Connection connection) throws ApplicationRuntimeException,InvalidInputException {
-       return  productDao.display(connection);
-
-    }
-
-    /**
      * This method delete the order by taking name of product
      *
      * @param connection for connecting to database
@@ -81,5 +70,9 @@ public class OrderService {
     public void deleteOrder(Connection connection, String name) throws ApplicationRuntimeException,InvalidInputException {
         orderDao.deleteOrder(connection, name);
 
+    }
+
+    public OrderDisplay displayOrderDetail(String name, Connection connection)throws ApplicationRuntimeException,InvalidInputException {
+        return orderDao.displayUsersToDb(name, connection);
     }
 }

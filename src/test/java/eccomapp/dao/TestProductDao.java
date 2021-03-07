@@ -35,13 +35,6 @@ public class TestProductDao {
         productDao.addProduct(productEntity,connection);
     }
     @Test
-    public void testDisplay() throws SQLException {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true).thenReturn(false);
-        productDao.display(connection);
-    }
-    @Test
     public void testGetUuid() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
@@ -59,7 +52,7 @@ public class TestProductDao {
     public  void testDelte() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        productDao.deleteProduct(connection,productEntity);
+        productDao.deleteProduct(connection,"laptop");
     }
     @Test
     public  void testUpdate() throws SQLException {
@@ -71,7 +64,7 @@ public class TestProductDao {
     public  void testUpdateProduct() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        productDao.updateQuantity(connection,productEntity);
+        productDao.updateQuantity(connection,"samsung",20);
     }
     @Test
     public  void testGetTotalQuantity() throws SQLException {
@@ -83,23 +76,13 @@ public class TestProductDao {
     public  void testUpdateQuantity() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        productDao.updateQuantity(connection,productEntity);
+        productDao.updateQuantity(connection,"laptop",10);
     }
     @Test
     public  void testGetTotalCostOrder() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         productDao.getTotalCostOrder(connection,"prashant");
-    }
-    @Test
-    public void testWrongDisplay() throws SQLException {
-        try {
-            when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-            when(preparedStatement.executeQuery()).thenThrow(new SQLException());
-            productDao.display(connection);
-        } catch (ApplicationRuntimeException e) {
-            assertEquals("invalid input",e.getErrorMessage());
-        }
     }
     @Test
     public void testWrongGetId() throws SQLException {
@@ -127,7 +110,7 @@ public class TestProductDao {
             when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             when(preparedStatement.executeUpdate()).thenThrow(new SQLException());
-            productDao.deleteProduct(connection,productEntity);
+            productDao.deleteProduct(connection,"Bottle");
         } catch (ApplicationRuntimeException e) {
             assertEquals("product id",e.getErrorMessage());
         }

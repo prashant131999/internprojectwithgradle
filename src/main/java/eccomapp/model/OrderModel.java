@@ -1,10 +1,8 @@
 package eccomapp.model;
 
-import java.util.UUID;
-
 public class OrderModel {
     private String name,email;
-    private UUID orderid;
+  //  private UUID orderid;
     public OrderModel(String name,String email)
     {
 
@@ -27,7 +25,7 @@ public class OrderModel {
         return email;
     }
 
-    public void setOrderid(UUID orderid) {
-        this.orderid=orderid;
-    }
+//    public void setOrderid(UUID orderid) {
+//        this.orderid=orderid;
+//    }
 }

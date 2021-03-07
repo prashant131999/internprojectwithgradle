@@ -1,8 +1,9 @@
 package eccomapp.api;
 
-
 import eccomapp.entity.ProductEntity;
+import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.ProductModel;
 import eccomapp.service.ProductService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -41,15 +42,24 @@ public class ProductControllerApi {
             @ApiResponse(code = 404, message = "not found in database!!!"),
             @ApiResponse(code = 500, message = "sql exception")})
 
-    @DeleteMapping("/deleteProduct")
-    public ResponseEntity deleteUser(@Valid @RequestBody ProductEntity productEntity) {
-        boolean flag = true;
-        if (flag) {
-            productService.deleteProduct(connection, productEntity);
-            flag = false;
+    @DeleteMapping("/deleteProduct/{prodName}")
+    public ResponseEntity deleteProduct(@Valid @PathVariable String prodName) {
+        ProductModel productModel=null;
+        try {
+            productModel=productService.displayProducts(prodName,connection);
+            if(productModel!=null) {
+                productService.deleteProduct(connection,prodName);
+            }
+            else
+            {
+                return new ResponseEntity("Product not exist",HttpStatus.BAD_REQUEST);
+            }
+        } catch (InvalidInputException e) {
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
         }
-        if (flag) {
-            return new ResponseEntity("Product not deleted",HttpStatus.BAD_REQUEST);
+        catch (ApplicationRuntimeException e)
+        {
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity("Product deleted",HttpStatus.OK);
     }
@@ -60,15 +70,27 @@ public class ProductControllerApi {
             @ApiResponse(code = 404, message = "not found in database!!!"),
             @ApiResponse(code = 500, message = "sql exception")})
 
-    @PutMapping("/updatedProductQuantity")
-    public ResponseEntity updateUser(@Valid @RequestBody ProductEntity productEntity)
+    @PutMapping("/updatedProductQuantity/{prodName}/{quantity}")
+    public ResponseEntity updateProductQuantity(@PathVariable String prodName,@PathVariable int quantity)
     {
-            try {
-                productService.updateProductQuantity(connection,productEntity);
-            } catch (InvalidInputException e) {
-                return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
+        ProductModel productModel=null;
+        try {
+            productModel=productService.displayProducts(prodName,connection);
+            if(productModel!=null) {
+                productService.updateProductQuantity(connection,prodName,quantity);
             }
-        return new ResponseEntity("Product Quantity updated",HttpStatus.OK);
+            else
+            {
+                return new ResponseEntity("Product not exist",HttpStatus.BAD_REQUEST);
+            }
+        } catch (InvalidInputException e) {
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
+        }
+        catch (ApplicationRuntimeException e)
+        {
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity("Product quantity updated",HttpStatus.OK);
     }
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
@@ -77,13 +99,39 @@ public class ProductControllerApi {
             @ApiResponse(code = 404, message = "not found in database!!!"),
             @ApiResponse(code = 500, message = "sql exception")})
     @PutMapping("/updatedProductName/{oldName}/{newName}")
-    public ResponseEntity updateProduct(@PathVariable String oldName,@PathVariable String newName)
+    public ResponseEntity updateProductName(@PathVariable String oldName,@PathVariable String newName)
     {
-            try {
+        ProductModel productModel=null;
+        try {
+            productModel=productService.displayProducts(oldName,connection);
+            if(productModel!=null) {
                 productService.updateProductName(connection,newName,oldName);
+            }
+            else
+            {
+                return new ResponseEntity("Product not exist",HttpStatus.BAD_REQUEST);
+            }
             } catch (InvalidInputException e) {
                 return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
             }
+        catch (ApplicationRuntimeException e)
+        {
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity("Product name updated",HttpStatus.OK);
+    }
+    @GetMapping("/displayProductDetail/{productName}")
+    public ResponseEntity productDetail(@Valid @PathVariable String productName) {
+        ProductModel productDetail;
+        try {
+            productDetail=productService.displayProducts(productName,connection);
+        } catch (InvalidInputException e) {
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch (ApplicationRuntimeException e)
+        {
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(productDetail,HttpStatus.OK);
     }
 }

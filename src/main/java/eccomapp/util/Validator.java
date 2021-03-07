@@ -10,7 +10,7 @@ public class Validator {
     {
         if(quant>availableQuantity)
         {
-            throw new InvalidInputException(400,"check input");
+            throw new InvalidInputException(400,"Quantity cant be greater then 50");
         }
         else {
             availableQuantity = availableQuantity - quant;

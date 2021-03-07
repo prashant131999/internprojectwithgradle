@@ -2,13 +2,12 @@ package eccomapp.dao;
 
 import eccomapp.entity.ProductEntity;
 import eccomapp.exception.ApplicationRuntimeException;
+import eccomapp.model.ProductModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**The ProductDao add the products ,display products ,get id from product database.
@@ -38,33 +37,6 @@ public class ProductDao {
         }
 
     }
-    /** This method display the products
-     *
-     * @param connection for connection
-     * @throws ApplicationRuntimeException
-     */
-    public List<ProductEntity> display(Connection connection) throws ApplicationRuntimeException {
-
-        try {
-            List<ProductEntity>products=new ArrayList<>();
-            String sql = "SELECT * FROM products ";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                String name = rs.getString("product_name");
-                int quant = rs.getInt("prod_quantity");
-                float totalcost = rs.getFloat("product_cost");
-                ProductEntity productEntity=new ProductEntity(quant,name,totalcost);
-                products.add(productEntity);
-            }
-            return products;
-        }catch (SQLException e)
-        {
-            throw new ApplicationRuntimeException(400,"invalid input",e.getCause());
-        }
-    }
-
-
     /**
      * This method returns the UUID of product by taking product name as input
      *
@@ -120,11 +92,11 @@ public class ProductDao {
      * @param name for product name
      * @throws ApplicationRuntimeException
      */
-    public void deleteProduct(Connection connection, ProductEntity productEntity) throws ApplicationRuntimeException {
+    public void deleteProduct(Connection connection, String prodName) throws ApplicationRuntimeException {
         try {
             String sql = "DELETE FROM products WHERE prod_id=?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setObject(1, getID(connection, productEntity));
+            statement.setObject(1, getIDByName(connection, prodName));
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new ApplicationRuntimeException(400, "product id",e.getCause());
@@ -183,15 +155,15 @@ public class ProductDao {
      * @param logger for logging
      * @throws ApplicationRuntimeException
      */
-    public void updateQuantity(Connection connection, ProductEntity productEntity) throws ApplicationRuntimeException {
+    public void updateQuantity(Connection connection, String prodName,int newQuantity) throws ApplicationRuntimeException {
         try {
-            float cost = getTotalCost(connection, productEntity.getProdName());
-            float totalCost = productEntity.getQuantity() * cost;
+            float cost = getTotalCost(connection, prodName);
+            float totalCost = newQuantity * cost;
             String sql = "UPDATE products SET prod_quantity=?,product_cost=? WHERE product_name=?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, productEntity.getQuantity());
+            statement.setInt(1, newQuantity);
             statement.setFloat(2, totalCost);
-            statement.setString(3, productEntity.getProdName());
+            statement.setString(3, prodName);
             statement.executeUpdate();
         }catch (SQLException e) {
             throw new ApplicationRuntimeException(400, "product id",e.getCause());
@@ -219,6 +191,27 @@ public class ProductDao {
             throw new ApplicationRuntimeException(400, "wrong product name",e.getCause());
         }
         return null;
+
+    }
+    public ProductModel displayUsersToDb(String name, Connection connection) throws ApplicationRuntimeException {
+
+        try {
+            String q = "select * from products where  product_name=?";
+            PreparedStatement pstmt = connection.prepareStatement(q);
+            pstmt.setString(1, name);
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            UUID prodId = (UUID) rs.getObject(1);
+            String prodName = rs.getString(2);
+            int quant  = rs.getInt(3);
+            float totalcost = rs.getFloat(4);
+            ProductModel productModel=new ProductModel(prodName,quant,totalcost,prodId);
+            return productModel;
+
+
+        } catch (SQLException e) {
+            throw new ApplicationRuntimeException(500, "Product not present in database", e);
+        }
 
     }
 

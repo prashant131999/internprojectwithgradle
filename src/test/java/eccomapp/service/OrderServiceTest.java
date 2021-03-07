@@ -42,9 +42,5 @@ public class OrderServiceTest {
         orderService.deleteOrder(connection,"prashant");
     }
 
-    @Test
-    public void testDisplay() throws InvalidInputException {
-        orderService.displayOrder(connection);
-    }
 
 }

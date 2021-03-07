@@ -36,7 +36,7 @@ public class ProductServiceTest {
     public void testDeleteProduct()
     {
         when(productDao.getQuantity(connection,"prashant")).thenReturn(1);
-        productService.deleteProduct(connection,productEntity);
+        productService.deleteProduct(connection,"laptop");
     }
     @Test
     public void testUpdateProduct() throws InvalidInputException {
@@ -44,6 +44,6 @@ public class ProductServiceTest {
     }
     @Test
     public void testUpdateQuantity() throws InvalidInputException {
-        productService.updateProductQuantity(connection,productEntity);
+        productService.updateProductQuantity(connection,"samsung",10);
     }
 }

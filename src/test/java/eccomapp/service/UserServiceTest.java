@@ -7,6 +7,7 @@ import eccomapp.dao.UserDao;
 import eccomapp.entity.OrderEntity;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.UserModel;
 import eccomapp.util.Validator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,10 +28,11 @@ public class UserServiceTest {
     private static Validator validator = Mockito.mock(Validator.class);
     private static UserEntity userEntity = Mockito.mock(UserEntity.class);
     private static Cache cache=Mockito.mock((Cache.class));
+    private static UserModel userModel=Mockito.mock(UserModel.class);
 
     @BeforeAll
     public static void setup() {
-        userService = new UserService(userEntity,userDao,validator,cache);
+        userService = new UserService(userEntity,userDao,validator,cache,userModel);
     }
     @Test
     public void testAddUser() throws InvalidInputException {
@@ -43,18 +45,17 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testUpdateUser()
-    {
+    public void testUpdateUser() throws InvalidInputException {
         when(cache.contains("9639402926")).thenReturn(true);
         doNothing().when(cache).delete("9639402926");
         doNothing().when(cache).put("9639402926",userEntity);
-        userService.updateUser(connection,userEntity);
+        userService.updateUser(connection,userModel);
     }
     @Test
     public void testDeleteUser() throws InvalidInputException {
         doNothing().when(validator).validateEmailAddress("prashant@gmail.com");
         when(cache.contains("prashant@gmail.com")).thenReturn(true);
-        userService.deleteUser(connection,userEntity);
+        userService.deleteUser(connection,"prashant@gmail.com");
 
 
     }

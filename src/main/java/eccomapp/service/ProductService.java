@@ -4,6 +4,7 @@ import eccomapp.dao.ProductDao;
 import eccomapp.entity.ProductEntity;
 import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.ProductModel;
 import eccomapp.util.Validator;
 
 import java.sql.Connection;
@@ -57,11 +58,10 @@ public class ProductService {
      * @param name       name of product to delete
      * @param logger     for logging
      */
-    public void deleteProduct(Connection connection, ProductEntity productEntity) {
-        productEntity.setProductid(UUID.randomUUID());
-        productDao.deleteProduct( connection, productEntity);
+    public void deleteProduct(Connection connection, String prodName) {
+        productDao.deleteProduct( connection, prodName);
         int addedquantity = 0;
-        addedquantity = productDao.getQuantity(connection, productEntity.getProdName());
+        addedquantity = productDao.getQuantity(connection, prodName);
         validator.addQuantity(addedquantity);
     }
 
@@ -86,11 +86,13 @@ public class ProductService {
      * @param quantity   for the new quantity
      * @param logger     for logging
      */
-    public void updateProductQuantity(Connection connection, ProductEntity productEntity) throws ApplicationRuntimeException, InvalidInputException {
-        productEntity.setProductid(UUID.randomUUID());
-        validator.validateQuantity(productEntity.getQuantity());
-        productDao.updateQuantity(connection, productEntity);
+    public void updateProductQuantity(Connection connection,String prodName,int quantity) throws ApplicationRuntimeException, InvalidInputException {
+        validator.validateQuantity(quantity);
+        productDao.updateQuantity(connection, prodName,quantity);
     }
 
 
+    public ProductModel displayProducts(String productName, Connection connection) throws ApplicationRuntimeException,InvalidInputException {
+        return productDao.displayUsersToDb(productName, connection);
+    }
 }
