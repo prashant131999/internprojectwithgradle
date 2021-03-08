@@ -3,6 +3,7 @@ package eccomapp.service;
 import eccomapp.dao.ProductDao;
 import eccomapp.entity.ProductEntity;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.ProductModel;
 import eccomapp.util.Validator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ public class ProductServiceTest {
     private static Validator validator = Mockito.mock(Validator.class);
     private static ProductEntity productEntity=Mockito.mock(ProductEntity.class) ;
     private static ProductDao productDao = Mockito.mock(ProductDao.class);
+    private static ProductModel productModel=Mockito.mock(ProductModel.class);
     @BeforeAll
     public static void setup() {
         productService = new ProductService(productDao,validator,productEntity);
@@ -45,5 +47,11 @@ public class ProductServiceTest {
     @Test
     public void testUpdateQuantity() throws InvalidInputException {
         productService.updateProductQuantity(connection,"samsung",10);
+    }
+    @Test
+    public void testDisplayProducts() throws InvalidInputException
+    {
+        when(productDao.displayProductsToDb("laptop",connection)).thenReturn(productModel);
+        productService.displayProducts("laptop",connection);
     }
 }

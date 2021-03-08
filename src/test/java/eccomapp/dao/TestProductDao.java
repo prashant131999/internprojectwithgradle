@@ -115,5 +115,13 @@ public class TestProductDao {
             assertEquals("product id",e.getErrorMessage());
         }
     }
+    @Test
+    public void testDisplayUserToDb() throws SQLException, ApplicationRuntimeException {
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        productDao.displayProductsToDb("prashant@gmail.com", connection);
+    }
 
 }

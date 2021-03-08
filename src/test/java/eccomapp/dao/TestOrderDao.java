@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,6 +60,22 @@ public class TestOrderDao {
         } catch (ApplicationRuntimeException e) {
             assertEquals("wrong product name",e.getErrorMessage());
         }
+    }
+    @Test
+    public void testDisplayUserToDb() throws SQLException, ApplicationRuntimeException {
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        orderDao.displayOrdersToDb("prashant",connection);
+    }
+    @Test
+    public void testDisplayOrder() throws SQLException, ApplicationRuntimeException {
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        orderDao.deleteOrderByCustIdToDb(UUID.randomUUID(), connection);
     }
 
 }

@@ -22,13 +22,16 @@ public class UserService {
     private Validator validator;
     private Cache cache;
     private UserModel userModel;
+    private OrderService orderService;
 
-    public UserService(UserEntity userEntity, UserDao userDao, Validator validator, Cache cache, UserModel userModel) {
+    public UserService(UserEntity userEntity, UserDao userDao, Validator validator, Cache cache, UserModel userModel
+    ,OrderService orderService) {
         this.userEntity = userEntity;
         this.userDao = userDao;
         this.validator = validator;
         this.cache = cache;
         this.userModel=userModel;
+        this.orderService=orderService;
     }
 
     public UserService() {
@@ -37,6 +40,7 @@ public class UserService {
         validator = new Validator();
         cache = new Cache(10);
         userModel=new UserModel();
+        orderService=new OrderService();
     }
 
 
@@ -66,18 +70,18 @@ public class UserService {
      * email id of user
      *
      * @param connection for connecting to database
-     * @param logger     for logging
      */
 
     public void deleteUser(Connection connection, String email) throws ApplicationRuntimeException, InvalidInputException {
         validator.validateEmailAddress(email);
         if (cache.contains(email)) {
             cache.delete(email);
-            userDao.deleteUser(email, connection);
+//            userDao.deleteUser(email, connection);
         }
-        else {
+        UUID custId=userDao.getID(connection,email);
+        orderService.deleteOrderById(custId,connection);
             userDao.deleteUser(email, connection);
-        }
+
 
     }
 

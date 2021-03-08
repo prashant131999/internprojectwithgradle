@@ -73,6 +73,10 @@ public class OrderService {
     }
 
     public OrderDisplay displayOrderDetail(String name, Connection connection)throws ApplicationRuntimeException,InvalidInputException {
-        return orderDao.displayUsersToDb(name, connection);
+        return orderDao.displayOrdersToDb(name, connection);
+    }
+    public void deleteOrderById(UUID custId,Connection connection)
+    {
+        orderDao.deleteOrderByCustIdToDb(custId,connection);
     }
 }

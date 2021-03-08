@@ -122,6 +122,14 @@ public class TestUserDao {
             assertEquals("wrong mail",e.getErrorMessage());
         }
     }
+    @Test
+    public void testDisplayUserToDb() throws SQLException, ApplicationRuntimeException {
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        userDao.displayUsersToDb("prashant@gmail.com", connection);
+    }
 
 
 }

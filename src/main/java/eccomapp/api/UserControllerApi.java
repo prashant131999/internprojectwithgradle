@@ -87,6 +87,11 @@ public class UserControllerApi {
         return new ResponseEntity("User updated",HttpStatus.OK);
 
     }
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success|OK"),
+            @ApiResponse(code = 404, message = "not found in database!!!"),
+            @ApiResponse(code = 500, message = "sql exception")})
+
     @GetMapping("/displayUserDetail/{email}")
     public ResponseEntity userDetail(@Valid @PathVariable String email) {
         UserEntity user;

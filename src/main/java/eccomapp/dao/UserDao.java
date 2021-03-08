@@ -114,46 +114,4 @@ public class UserDao {
         }
 
     }
-    public boolean checkEmailPresence(String email,Connection connection) throws ApplicationRuntimeException {
-        try {
-            int count=0;
-            String q = "select first_name from customer where email=?";
-            PreparedStatement pstmt = connection.prepareStatement(q);
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
-            while(rs.next())
-            {
-                count++;
-            }
-            if(count>0)
-            {
-                return true;
-            }
-        } catch (SQLException e) {
-           throw new ApplicationRuntimeException(400,"Wrong email",e);
-        }
-
-      return false;
-    }
-    public boolean checkPresence(String mobileNumber,Connection connection) throws ApplicationRuntimeException {
-        try {
-            int count=0;
-            String q = "select first_name from customer where mobile_number=?";
-            PreparedStatement pstmt = connection.prepareStatement(q);
-            pstmt.setString(1, mobileNumber);
-            ResultSet rs = pstmt.executeQuery();
-            while(rs.next())
-            {
-                count++;
-            }
-            if(count>0)
-            {
-                return true;
-            }
-        } catch (SQLException e) {
-            throw new ApplicationRuntimeException(400,"Wrong number",e.getCause());
-        }
-
-        return false;
-    }
 }

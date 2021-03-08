@@ -29,10 +29,11 @@ public class UserServiceTest {
     private static UserEntity userEntity = Mockito.mock(UserEntity.class);
     private static Cache cache=Mockito.mock((Cache.class));
     private static UserModel userModel=Mockito.mock(UserModel.class);
+    private static OrderService orderService=Mockito.mock(OrderService.class);
 
     @BeforeAll
     public static void setup() {
-        userService = new UserService(userEntity,userDao,validator,cache,userModel);
+        userService = new UserService(userEntity,userDao,validator,cache,userModel,orderService);
     }
     @Test
     public void testAddUser() throws InvalidInputException {
@@ -56,7 +57,10 @@ public class UserServiceTest {
         doNothing().when(validator).validateEmailAddress("prashant@gmail.com");
         when(cache.contains("prashant@gmail.com")).thenReturn(true);
         userService.deleteUser(connection,"prashant@gmail.com");
-
-
+    }
+    @Test void testDisplayUser() throws InvalidInputException
+    {
+        when(userDao.displayUsersToDb("prashant@gmail.com",connection)).thenReturn(userEntity);
+        userService.displayUsers("prashant@gmail.com",connection);
     }
 }

@@ -93,6 +93,6 @@ public class ProductService {
 
 
     public ProductModel displayProducts(String productName, Connection connection) throws ApplicationRuntimeException,InvalidInputException {
-        return productDao.displayUsersToDb(productName, connection);
+        return productDao.displayProductsToDb(productName, connection);
     }
 }

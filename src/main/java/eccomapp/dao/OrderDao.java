@@ -56,7 +56,7 @@ public class OrderDao {
             throw new ApplicationRuntimeException(400,"wrong product name",e.getCause());
         }
     }
-    public OrderDisplay displayUsersToDb(String name, Connection connection) throws ApplicationRuntimeException {
+    public OrderDisplay displayOrdersToDb(String name, Connection connection) throws ApplicationRuntimeException {
 
         try {
             String q = "select * from orders where product_list=?";
@@ -70,11 +70,23 @@ public class OrderDao {
             float totalValue = rs.getFloat(4);
             OrderDisplay orderDisplay=new OrderDisplay(prodName,totalValue,customerId,orderId);
             return orderDisplay;
-
-
         } catch (SQLException e) {
             throw new ApplicationRuntimeException(500, "Order not present in database", e);
         }
+
+    }
+    public void deleteOrderByCustIdToDb(UUID custId, Connection con) throws ApplicationRuntimeException {
+        try {
+            String q = "delete from orders where customer_id=?";
+            PreparedStatement pstmt = con.prepareStatement(q);
+            pstmt.setObject(1, custId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+
+            throw new ApplicationRuntimeException(500, "Cant delete the orders", e);
+
+        }
+
 
     }
 

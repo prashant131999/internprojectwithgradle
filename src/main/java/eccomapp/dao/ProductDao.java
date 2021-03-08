@@ -193,7 +193,7 @@ public class ProductDao {
         return null;
 
     }
-    public ProductModel displayUsersToDb(String name, Connection connection) throws ApplicationRuntimeException {
+    public ProductModel displayProductsToDb(String name, Connection connection) throws ApplicationRuntimeException {
 
         try {
             String q = "select * from products where  product_name=?";
