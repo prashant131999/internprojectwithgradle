@@ -3,6 +3,7 @@ package eccomapp.dao;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.UserAddModel;
 import eccomapp.model.UserModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,17 +26,19 @@ public class TestUserDao {
     private PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
     private ResultSet resultSet = Mockito.mock(ResultSet.class);
     private UserModel userModel=Mockito.mock(UserModel.class);
+    private UserAddModel userAddModel=Mockito.mock(UserAddModel.class);
 
     @BeforeEach
     public  void setup() {
         userDao = new UserDao();
+
     }
 
     @Test
     public void testCreateUser() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        userDao.createNewUser(userEntity, connection);
+        userDao.createNewUser(userAddModel, connection);
     }
 
     @Test
@@ -97,7 +100,7 @@ public class TestUserDao {
         try {
             when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
             when(preparedStatement.executeUpdate()).thenThrow(new SQLException());
-            userDao.createNewUser(userEntity,connection);
+            userDao.createNewUser(userAddModel,connection);
         } catch (ApplicationRuntimeException e) {
             assertEquals("Server error",e.getErrorMessage());
         }
@@ -121,14 +124,6 @@ public class TestUserDao {
         } catch (ApplicationRuntimeException e) {
             assertEquals("wrong mail",e.getErrorMessage());
         }
-    }
-    @Test
-    public void testDisplayUserToDb() throws SQLException, ApplicationRuntimeException {
-
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true).thenReturn(false);
-        userDao.displayUsersToDb("prashant@gmail.com", connection);
     }
 
 

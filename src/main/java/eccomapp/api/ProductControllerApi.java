@@ -19,6 +19,11 @@ public class ProductControllerApi {
     private static java.sql.Connection connection = eccomapp.util.Connection.create();
     private ProductService productService = new ProductService();
 
+    /** Generates the post mapping to add product to database
+     *
+     * @param productEntity for taking input
+     * @return response entity
+     */
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
@@ -35,6 +40,12 @@ public class ProductControllerApi {
         }
         return new ResponseEntity("Product Added", HttpStatus.OK);
     }
+
+    /**generates the delete mapping to delete product from database
+     *
+     * @param prodName for product name
+     * @return response entity
+     */
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
@@ -59,10 +70,17 @@ public class ProductControllerApi {
         }
         catch (ApplicationRuntimeException e)
         {
-            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity("Product deleted",HttpStatus.OK);
     }
+
+    /** Generates the put mapping to update product quantity
+     *
+     * @param prodName for product name
+     * @param quantity for product quantity
+     * @return response entity
+     */
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
@@ -88,10 +106,17 @@ public class ProductControllerApi {
         }
         catch (ApplicationRuntimeException e)
         {
-            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity("Product quantity updated",HttpStatus.OK);
     }
+
+    /**Generates Put mapping to update product name
+     *
+     * @param oldName for previous name of product
+     * @param newName for new name of product
+     * @return response entity
+     */
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
@@ -116,10 +141,22 @@ public class ProductControllerApi {
             }
         catch (ApplicationRuntimeException e)
         {
-            return new ResponseEntity(e.getErrorMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getErrorMessage(),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity("Product name updated",HttpStatus.OK);
     }
+
+    /**Generates the get mapping to display product details
+     *
+     * @param productName for product name
+     * @return product detail
+     */
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success|OK"),
+            @ApiResponse(code = 401, message = "not authorized!"),
+            @ApiResponse(code = 403, message = "forbidden!!!"),
+            @ApiResponse(code = 404, message = "not found in database!!!"),
+            @ApiResponse(code = 500, message = "sql exception")})
     @GetMapping("/displayProductDetail/{productName}")
     public ResponseEntity productDetail(@Valid @PathVariable String productName) {
         ProductModel productDetail;
@@ -130,7 +167,7 @@ public class ProductControllerApi {
         }
         catch (ApplicationRuntimeException e)
         {
-            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(productDetail,HttpStatus.OK);
     }

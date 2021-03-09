@@ -5,6 +5,7 @@ import eccomapp.dao.UserDao;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.UserAddModel;
 import eccomapp.model.UserModel;
 import eccomapp.util.Validator;
 
@@ -51,17 +52,17 @@ public class UserService {
      * @UserEntity for taking inputs from user entity
      */
 
-    public void addUser(Connection connection, UserEntity userEntity) throws ApplicationRuntimeException, InvalidInputException {
-        userEntity.setUserid(UUID.randomUUID());
-        validator.validateNames(userEntity.getFname());
-        validator.validateNames(userEntity.getLname());
-        validator.validateEmailAddress(userEntity.getEmail());
-        validator.validateMobileNumber(userEntity.getMobileNumber());
-        if (cache.contains(userEntity.getMobileNumber())) {
+    public void addUser(Connection connection, UserAddModel userAddModel) throws ApplicationRuntimeException, InvalidInputException {
+        userAddModel.setUserid(UUID.randomUUID());
+        validator.validateNames(userAddModel.getFname());
+        validator.validateNames(userAddModel.getLname());
+        validator.validateEmailAddress(userAddModel.getEmail());
+        validator.validateMobileNumber(userAddModel.getMobileNumber());
+        if (cache.contains(userAddModel.getMobileNumber())) {
             return;
         } else {
-            userDao.createNewUser(userEntity, connection);
-            cache.put(userEntity.getMobileNumber(), userEntity);
+            userDao.createNewUser(userAddModel, connection);
+            cache.put(userEntity.getMobileNumber(), userAddModel);
         }
     }
 
@@ -76,7 +77,6 @@ public class UserService {
         validator.validateEmailAddress(email);
         if (cache.contains(email)) {
             cache.delete(email);
-//            userDao.deleteUser(email, connection);
         }
         UUID custId=userDao.getID(connection,email);
         orderService.deleteOrderById(custId,connection);
@@ -90,10 +90,10 @@ public class UserService {
      * This method
      *
      * @param connection for connecting to database
-     * @param userEntity for userEntity object
      * @throws ApplicationRuntimeException
      */
     public void updateUser(Connection connection, UserModel userModel) throws ApplicationRuntimeException,InvalidInputException {
+        validator.validateEmailAddress(userModel.getEmail());
             if (cache.contains(userModel.getEmail())) {
                 cache.put(userModel.getAddress(), userEntity);
                 userDao.updateUser(userModel, connection);
@@ -103,7 +103,17 @@ public class UserService {
 
 
     }
+
+    /**This method calls the dao and takes entity as a return from dao
+     *
+     * @param email for email of user
+     * @param connection for connection
+     * @return UserEntity
+     * @throws ApplicationRuntimeException
+     * @throws InvalidInputException
+     */
     public UserEntity displayUsers(String email,Connection connection)throws ApplicationRuntimeException,InvalidInputException {
+        validator.validateEmailAddress(email);
         return userDao.displayUsersToDb(email, connection);
     }
 

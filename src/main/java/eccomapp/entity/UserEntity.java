@@ -8,11 +8,12 @@ public class UserEntity {
     @NotNullAnnotation
     private String  lname;
 
-    private String dateOfBirth, email, address,fname, dateCreated, dateLastUpdated, mobileNumber;
+    private String dateOfBirth, email, address,fname, dateLastUpdated, mobileNumber;
+    private String dateCreated;
 
     UUID userid ;
-    public UserEntity(String fname,String lname,String email,String dateOfBirth,String address
-    ,String mobileNumber)
+    public UserEntity(String fname, String lname, String email, String dateOfBirth, String address
+    , String mobileNumber)
     {
         this.fname=fname;
         this.lname=lname;
@@ -21,13 +22,24 @@ public class UserEntity {
         this.address=address;
         this.mobileNumber=mobileNumber;
     }
+
+    public UserEntity(UUID userid,String fname, String lname, String email, String dateOfBirth, String address
+            , String mobileNumber, String date)
+    {
+        this.userid=userid;
+        this.fname=fname;
+        this.lname=lname;
+        this.email=email;
+        this.dateOfBirth=dateOfBirth;
+        this.address=address;
+        this.mobileNumber=mobileNumber;
+        this.dateCreated = date;
+    }
+
     public UserEntity()
     {
     }
 
-    public void setDateCreated(String dateCreated) {
-        this.dateCreated = dateCreated;
-    }
 
     public void setAddress(String address) {
         this.address = address;

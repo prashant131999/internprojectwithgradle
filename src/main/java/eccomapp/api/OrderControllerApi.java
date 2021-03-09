@@ -26,6 +26,12 @@ public class OrderControllerApi {
     private UserService userService = new UserService();
     private ProductService productService=new ProductService();
     private OrderEntity orderEntity = new OrderEntity();
+
+    /**Generates the post mapping to add order to database through api
+     *
+     * @param orderModel for taking valid inputs
+     * @return response
+     */
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
@@ -49,10 +55,16 @@ public class OrderControllerApi {
             return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
         }
         catch (ApplicationRuntimeException e) {
-            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity("order placed", HttpStatus.OK);
     }
+
+    /**Generates the get mapping to display order detail
+     *
+     * @param prodName for product name
+     * @return orderdispaly
+     */
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
@@ -68,10 +80,16 @@ public class OrderControllerApi {
             return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
         }
         catch (ApplicationRuntimeException e) {
-            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(orders,HttpStatus.OK);
     }
+
+    /**Generates the delete mapping to delete order from database
+     *
+     * @param name for name of product
+     * @return response
+     */
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success|OK"),
             @ApiResponse(code = 401, message = "not authorized!"),
@@ -91,7 +109,7 @@ public class OrderControllerApi {
             return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
         }
         catch (ApplicationRuntimeException e) {
-            return new ResponseEntity(e.getErrorMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getErrorMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity("order deleted", HttpStatus.OK);
     }

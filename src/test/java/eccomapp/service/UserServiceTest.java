@@ -7,6 +7,7 @@ import eccomapp.dao.UserDao;
 import eccomapp.entity.OrderEntity;
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.InvalidInputException;
+import eccomapp.model.UserAddModel;
 import eccomapp.model.UserModel;
 import eccomapp.util.Validator;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +31,7 @@ public class UserServiceTest {
     private static Cache cache=Mockito.mock((Cache.class));
     private static UserModel userModel=Mockito.mock(UserModel.class);
     private static OrderService orderService=Mockito.mock(OrderService.class);
-
+    private static UserAddModel userAddModel=Mockito.mock(UserAddModel.class);
     @BeforeAll
     public static void setup() {
         userService = new UserService(userEntity,userDao,validator,cache,userModel,orderService);
@@ -42,7 +43,7 @@ public class UserServiceTest {
         doNothing().when(validator).validateEmailAddress("prashant@gmail.com");
         when(validator.validateMobileNumber("9639402926")).thenReturn(true);
         when(cache.contains("prashant")).thenReturn(false);
-        userService.addUser(connection,userEntity);
+        userService.addUser(connection,userAddModel);
     }
 
     @Test

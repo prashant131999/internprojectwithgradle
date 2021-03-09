@@ -2,29 +2,32 @@ package eccomapp.dao;
 
 import eccomapp.entity.UserEntity;
 import eccomapp.exception.ApplicationRuntimeException;
+import eccomapp.model.UserAddModel;
 import eccomapp.model.UserModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class UserDao {
     public UserDao() {
     }
 
-    public void createNewUser(UserEntity userEntity, Connection connection) throws RuntimeException {
+    public void createNewUser(UserAddModel userAddModel, Connection connection) throws RuntimeException {
 
         String sql = "INSERT INTO customer VAlUES(?,?,?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setObject(1, userEntity.getUserid());
-            statement.setString(2, userEntity.getFname());
-            statement.setString(3, userEntity.getLname());
-            statement.setString(4, userEntity.getAddress());
-            statement.setString(5, userEntity.getMobileNumber());
-            statement.setString(6, userEntity.getEmail());
-            statement.setString(7, userEntity.getDateOfBirth());
+            statement.setObject(1, userAddModel.getUserid());
+            statement.setString(2, userAddModel.getFname());
+            statement.setString(3, userAddModel.getLname());
+            statement.setString(4, userAddModel.getAddress());
+            statement.setString(5, userAddModel.getMobileNumber());
+            statement.setString(6, userAddModel.getEmail());
+            statement.setString(7, userAddModel.getDateOfBirth());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new ApplicationRuntimeException(500, "Server error", e.getCause());
@@ -99,13 +102,17 @@ public class UserDao {
             pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();
             rs.next();
+                UUID   userId= (UUID) rs.getObject(1);
                 String fName = rs.getString(2);
                 String lName = rs.getString(3);
                 String address = rs.getString(4);
                 String mobile = rs.getString(5);
                 String emailId = rs.getString(6);
                 String dob = rs.getString(7);
-                UserEntity userEntity=new UserEntity(fName,lName,emailId,dob,address,mobile);
+                Date date = rs.getDate(8);
+            SimpleDateFormat formatter=new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+            String datetime=formatter.format(date);
+            UserEntity userEntity=new UserEntity(userId,fName,lName,emailId,dob,address,mobile, datetime);
             return userEntity;
 
 

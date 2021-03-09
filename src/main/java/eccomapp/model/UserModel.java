@@ -11,11 +11,6 @@ public class UserModel {
     public UserModel()
     {
     }
-//    public String getMobileNo() {
-//        return mobileNo;
-//    }
-
-
     public String getEmail() {
         return email;
     }
